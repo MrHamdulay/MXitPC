@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.14"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="SplashWindow">
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkImage" id="splash">
+        <property name="visible">True</property>
+        <property name="stock">gtk-missing-image</property>
+      </object>
+    </child>
+  </object>
+</interface>

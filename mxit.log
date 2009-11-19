@@ -1,0 +1,124 @@
+<Queue.Queue instance at 0xa651b6c>
+5
+Attempting to send protocol.commands.SetMoodMessage
+Protocol thread started
+sending data
+Attempting to send protocol.commands.LoginMessage
+sending data
+We got chunk type 1
+We got chunk type 2
+Attempting to send protocol.commands.Message
+sending data
+Attempting to send protocol.commands.SetPresenceMessage
+Status updated
+sending data
+Attempting to send protocol.commands.SetMoodMessage
+sending data
+Received message of type 1
+Attempting to send protocol.commands.KeepAliveMessage
+sending data
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Attempting to send protocol.commands.Message
+sending data
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Received message of type 1
+Received message of type 1
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.KeepAliveMessage
+sending data
+Attempting to send protocol.commands.Message
+sending data
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Attempting to send protocol.commands.Message
+sending data
+presence changing
+Attempting to send protocol.commands.Message
+sending data
+presence changing
+Received message of type 1
+presence changing
+Attempting to send protocol.commands.KeepAliveMessage
+sending data
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.Message
+sending data
+Attempting to send protocol.commands.Message
+sending data
+Received message of type 1
+Attempting to send protocol.commands.KeepAliveMessage
+sending data
+Attempting to send protocol.commands.Message
+sending data
+<gtk.gdk.Pixbuf object at 0xa7d966c (GdkPixbuf at 0xb0485a0)>
+Attempting to send protocol.commands.Message
+sending data
+Attempting to send protocol.commands.LogoutMessage
+sending data

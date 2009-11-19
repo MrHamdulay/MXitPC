@@ -1,0 +1,322 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <!-- interface-local-resource-path F:\workspace\mxitpc\src\gui\glade -->
+  <object class="GtkWindow" id="MainWindow">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">MXit PC: Random Edition</property>
+    <property name="window_position">center</property>
+    <property name="default_width">300</property>
+    <property name="default_height">460</property>
+    <property name="gravity">north-east</property>
+    <signal name="destroy" handler="on_MainWindow_destroy" after="yes"/>
+    <child>
+      <object class="GtkVBox" id="vbox1">
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkMenuBar" id="menubar1">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkMenuItem" id="mxitItem">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_MXit</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu1">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkMenuItem" id="multimxItem">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_New MultiMX</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_multiMXItem_activate"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="preferencesItem">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Preferences</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_preferencesItem_activate"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="logoutItem">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Logout and Exit</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_MainWindow_destroy"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="contactsItem">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Contacts</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu3">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkMenuItem" id="addContactItem">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">A_dd Contact</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_addContactItem_activate"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="removeContactItem">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">R_emove Contact</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_removeContactItem_activate"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="editContactItem">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Edit Contact</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_editContactItem_activate"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="newGroupItem">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_New Group</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_newGroupItem_activate"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="hideOfflineItem">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Hide Offline</property>
+                        <property name="use_underline">True</property>
+                        <property name="active">True</property>
+                        <signal name="toggled" handler="on_hideOfflineItem_toggled"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImageMenuItem" id="presenceItem">
+                <property name="label" translatable="yes">_Presence</property>
+                <property name="visible">True</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu2">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkImageMenuItem" id="onlineItem">
+                        <property name="label" translatable="yes">_Online</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_presence_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="awayItem">
+                        <property name="label" translatable="yes">_Away</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_presence_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="busyItem">
+                        <property name="label" translatable="yes">_Busy</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_presence_changed"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImageMenuItem" id="moodItem">
+                <property name="label" translatable="yes">_Mood</property>
+                <property name="visible">True</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu4">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkImageMenuItem" id="happyItem">
+                        <property name="label" translatable="yes">_Happy</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_mood_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="sadItem">
+                        <property name="label" translatable="yes">_Sad</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_mood_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="excitedItem">
+                        <property name="label" translatable="yes">_Excited</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_mood_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="invincibleItem">
+                        <property name="label" translatable="yes">_Invincible</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_mood_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="hotItem">
+                        <property name="label" translatable="yes">_Hot</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_mood_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="angryItem">
+                        <property name="label" translatable="yes">_Angry</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_mood_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="grumpyItem">
+                        <property name="label" translatable="yes">_Grumpy</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_mood_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="sickItem">
+                        <property name="label" translatable="yes">Si_ck</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_mood_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="inloveItem">
+                        <property name="label" translatable="yes">I_n love</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_mood_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="sleepyItem">
+                        <property name="label" translatable="yes">S_leepy</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_mood_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="noneItem">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">None</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_mood_changed"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="statusEntry">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="has_frame">False</property>
+            <property name="invisible_char">&#x25CF;</property>
+            <property name="shadow_type">out</property>
+            <signal name="activate" handler="status_changed"/>
+            <signal name="button_release_event" handler="status_clicked"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow3">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <child>
+              <object class="GtkTreeView" id="ContactListTreeView">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
+                <property name="enable_grid_lines">vertical</property>
+                <signal name="row_activated" handler="on_ContactListTreeView_row_activated"/>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkStatusbar" id="statusbar1">
+            <property name="visible">True</property>
+            <property name="spacing">2</property>
+            <child>
+              <object class="GtkLabel" id="statusLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Offline</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
