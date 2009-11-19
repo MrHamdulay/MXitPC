@@ -39,11 +39,11 @@ class PreferencesDialog:
         self.builder.get_object('dobBox').pack_end(self.dobEntry, False, False)
         
         try:
-            self.builder.get_object('autoLoginButton').set_active(self.mxit['settings']['autoLogin'])
-            self.builder.get_object('contactInviteAlertButton').set_active(self.mxit['settings']['contactInviteAlert'])
-            self.builder.get_object('contactOnlineAlertButton').set_active(self.mxit['settings']['contactOnlineAlert'])
-            self.builder.get_object('messageAlertButton').set_active(self.mxit['settings']['newMessageAlert'])
-            self.builder.get_object('rememberMoodButton').set_active(self.mxit['settings']['rememberMood'])
+            self.builder.get_object('autoLoginButton').set_active(self.mxit.settings['autoLogin'])
+            self.builder.get_object('contactInviteAlertButton').set_active(self.mxit.settings['contactInviteAlert'])
+            self.builder.get_object('contactOnlineAlertButton').set_active(self.mxit.settings['contactOnlineAlert'])
+            self.builder.get_object('messageAlertButton').set_active(self.mxit.settings['newMessageAlert'])
+            self.builder.get_object('rememberMoodButton').set_active(self.mxit.settings['rememberMood'])
         except KeyError:
             self.builder.get_object('contactInviteAlertButton').set_active(True)
             self.builder.get_object('contactOnlineAlertButton').set_active(True)
@@ -66,8 +66,8 @@ class PreferencesDialog:
         self.dobEntry.set_text(message[0][2])
         
         self.builder.get_object('nicknameEntry').set_text(message[0][0])
-        self.builder.get_object('numberEntry').set_text(self.mxit['settings']['loginname'])
-        self.builder.get_object('passwordEntry').set_text(self.mxit['settings']['password'])
+        self.builder.get_object('numberEntry').set_text(self.mxit.settings['loginname'])
+        self.builder.get_object('passwordEntry').set_text(self.mxit.settings['password'])
         if message[0][1] == '1':
             self.builder.get_object('hideNumberButton').set_active(True)
         self._profileLoaded = True
@@ -75,11 +75,11 @@ class PreferencesDialog:
     def on_response(self, dialog, response_id, *args):
         dialog.destroy()
         
-        self.mxit['settings']['contactInviteAlert'] = self.builder.get_object('contactInviteAlertButton').get_active()
-        self.mxit['settings']['contactOnlineAlert'] = self.builder.get_object('contactOnlineAlertButton').get_active()
-        self.mxit['settings']['newMessageAlert'] = self.builder.get_object('messageAlertButton').get_active()
-        self.mxit['settings']['autoLogin'] = self.builder.get_object('autoLoginButton').get_active()
-        self.mxit['settings']['rememberMood'] = self.builder.get_object('rememberMoodButton').get_active()
+        self.mxit.settings['contactInviteAlert'] = self.builder.get_object('contactInviteAlertButton').get_active()
+        self.mxit.settings['contactOnlineAlert'] = self.builder.get_object('contactOnlineAlertButton').get_active()
+        self.mxit.settings['newMessageAlert'] = self.builder.get_object('messageAlertButton').get_active()
+        self.mxit.settings['autoLogin'] = self.builder.get_object('autoLoginButton').get_active()
+        self.mxit.settings['rememberMood'] = self.builder.get_object('rememberMoodButton').get_active()
         
         if self._profileLoaded:
             nickname = self.builder.get_object('nicknameEntry').get_text()

@@ -48,7 +48,7 @@ class LoginMessage(ClientMessage):
     ''' Sends a login message '''
     def __init__(self, password, locale, mxit):
         self.command = 1
-        settings = mxit['settings']
+        settings = mxit.settings
         distcode = settings['pid'][2:-8]
         
         password = Pin(password, settings['pid'])
@@ -60,9 +60,9 @@ def handle_login(errorCode, errorMessage, message, mxit):
     if not errorCode == 0:
         return
     #Make sure that on next login we get a login screen and not the registration screen
-    mxit['settings']['registered'] = '1'
+    mxit.settings['registered'] = '1'
     #Temporary store password to be used for auto login
-    mxit['settings']['password'] = mxit['settings']['tempPassword']
+    mxit.settings['password'] = mxit.settings['tempPassword']
  
     sesid = message[0]
     message = message[1]
@@ -153,8 +153,8 @@ class RegistrationMessage(ClientMessage):
     ''' Registers user'''
     def __init__(self, password, nickname, dob, gender, location, language, mxit):
         self.command = 11
-        distcode = mxit['settings']['pid'][2:-8]
-        password = Pin(password, mxit['settings']['pid'])
+        distcode = mxit.settings['pid'][2:-8]
+        password = Pin(password, mxit.settings['pid'])
         if gender == 'male' or gender:
             gender = 1
         else:
@@ -162,7 +162,7 @@ class RegistrationMessage(ClientMessage):
             
         self.message = [password, constants.VERSION, constants.MAX_REPLY_LEN, nickname,
                         dob, gender, location, constants.CAPABILITIES, distcode,
-                         constants.FEATURES, mxit['settings']['dial'], 
+                         constants.FEATURES, mxit.settings['dial'], 
                          language]
                          
 def handle_register(errorCode, errorMessage, message, mxit):
@@ -170,15 +170,15 @@ def handle_register(errorCode, errorMessage, message, mxit):
         #Handle error
         print errorMessage
         return
-    mxit['settings']['registered'] = True 
-    mxit['settings']['category'] = '1'
-    mxit['settings']['password'] = mxit['tempPassword']
+    mxit.settings['registered'] = True 
+    mxit.settings['category'] = '1'
+    mxit.settings['password'] = mxit['tempPassword']
     
     gobject.timeout_add(0, mxit['MainWindow'].setStatusLabel, 'Logged in')
-    mxit['settings']['connectionProxy'] = message[1][3]
-    mxit['settings']['pricePlan'] = message[1][3]
-    mxit['settings']['flags'] = message[1][6]
-    mxit['settings']['hiddenLoginname'] = message[2]
+    mxit.settings['connectionProxy'] = message[1][3]
+    mxit.settings['pricePlan'] = message[1][3]
+    mxit.settings['flags'] = message[1][6]
+    mxit.settings['hiddenLoginname'] = message[2]
 
     gobject.timeout_add(0, mxit['ActivationWindow'].__del__)
     #del mxit['ActivationWindow'] 
@@ -189,7 +189,7 @@ class UpdateProfileMessage(ClientMessage):
     def __init__(self, password, name, hideLoginName, dob, gender, mxit):
         self.command = 12
         mxit['tempPassword'] = password
-        password = Pin(password, mxit['settings']['pid'])
+        password = Pin(password, mxit.settings['pid'])
         if hideLoginName:
             hideLoginName = '1'
         else:
@@ -204,7 +204,7 @@ class UpdateProfileMessage(ClientMessage):
 def handle_update_profile(errorCode, errorMessage, message, mxit):
     try:
         #Remember to change the password in settings only once we get this confirmation
-        mxit['settings']['password'] = mxit['tempPassword']
+        mxit.settings['password'] = mxit['tempPassword']
     except KeyError:
         #For some reason this happens... find out why
         pass

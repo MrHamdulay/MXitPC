@@ -12,7 +12,7 @@ class LoginWindow:
         self.builder.add_from_file(os.path.join('gui', 'glade', 'LoginWindow.glade'))
         
         numberEntry = self.builder.get_object('numberEntry')
-        numberEntry.set_text(self.mxit['settings']['loginname'])
+        numberEntry.set_text(self.mxit.settings['loginname'])
         numberEntry.set_editable(False)
         
         dialog = self.builder.get_object('LoginDialog')
@@ -33,7 +33,7 @@ class LoginWindow:
         passwordEntry = self.builder.get_object('passwordEntry')
         password = passwordEntry.get_text()
         
-        self.mxit['settings']['tempPassword'] = password
+        self.mxit.settings['tempPassword'] = password
         #Validation
         try:
             int(password)
@@ -44,7 +44,7 @@ class LoginWindow:
             errorDialog('Password must be a number and more than 4 characters')
             return
             
-        self.mxit['settings']['autoLogin'] = self.builder.get_object('rememberButton').get_active()
+        self.mxit.settings['autoLogin'] = self.builder.get_object('rememberButton').get_active()
         
         self.mxit.do_login(password)
             

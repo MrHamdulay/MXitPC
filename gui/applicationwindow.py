@@ -53,7 +53,7 @@ class ApplicationWindow:
         self.window.show()
         
         try:
-            self.status = self.mxit['settings']['status'] 
+            self.status = self.mxit.settings['status'] 
             self.builder.get_object('statusEntry').set_text(self.status)
         except KeyError: 
             self.builder.get_object('statusEntry').set_text('Click here to change your status')
@@ -66,8 +66,8 @@ class ApplicationWindow:
         self.initMenuIcons()
 
         try:
-            if not self.mxit['settings'].has_key('rememberMood') or self.mxit['settings']['rememberMood']:
-                self.mood = self.mxit['settings']['lastmood']
+            if not self.mxit.settings.has_key('rememberMood') or self.mxit.settings['rememberMood']:
+                self.mood = self.mxit.settings['lastmood']
                 if not int(self.mood) == 0:
                     mood = MOODS[self.mood]
                     message = SetMoodMessage(int(self.mood), self.mxit)
@@ -91,7 +91,7 @@ class ApplicationWindow:
         self.status = widget.get_text()
         message = SetPresenceMessage(self.presence, self.status, self.mxit)
         self.mxit.sendMsg(message)
-        self.mxit['settings']['status'] = self.status
+        self.mxit.settings['status'] = self.status
         print 'Status updated'
         
     def status_clicked(self, widget, *args):
@@ -175,7 +175,7 @@ class ApplicationWindow:
             
     def on_mood_changed(self, menuitem, *args):
         mood = MOODS.index(menuitem.get_name()[:-4])
-        self.mxit['settings']['lastmood'] = mood
+        self.mxit.settings['lastmood'] = mood
         self.builder.get_object('moodItem').set_image(gtk.image_new_from_file(os.path.join(MOOD_IMAGES_BASE_DIR, '%s.png' % menuitem.get_name()[:-4])))
         message = SetMoodMessage(int(mood), self.mxit)
         self.mxit.sendMsg(message)

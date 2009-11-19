@@ -1,18 +1,21 @@
 #!/usr/bin/env python
 import sys
 import os.path
+import shelve
 
+'''Messed up hack for py2exe'''
 if hasattr(sys, 'frozen'):
     workingdir = os.path.dirname(unicode(sys.executable, sys.getfilesystemencoding()))
 else:
     workingdir = os.path.dirname(sys.argv[0])
 
-sys.stdout = open('mxit.log', 'w')
-sys.stderr = open('mxit.err.log', 'w')
+#sys.stdout = open('mxit.log', 'w')
+#sys.stderr = open('mxit.err.log', 'w')
 from Queue import Queue
 import threading
 import gobject
 
+'''TODO: Remove dependency on twisted'''
 from twisted.internet import gtk2reactor
 try:
     gtk2reactor.install()
@@ -20,7 +23,6 @@ except AssertionError:
     #We are most likely debugging
     pass
 from twisted.internet import reactor
-from twisted.persisted import sob
 
 import gtk
 
@@ -38,46 +40,12 @@ from sound import Sound
 
 gtk.gdk.threads_init()
 
-
-class Settings(dict):
-    def __init__(self, userdict={}):
-        dict.__init__(self, userdict)
-        self.load()
-
-    def load(self):
-        temp = {}
-        try:
-            temp.update(sob.load('.mxit', 'pickle'))
-        except Exception:
-            print 'No settings available'
-        dict.update(self, temp)
-
-    def __getitem__(self, key):
-        value = ''
-        try:
-            value = dict.__getitem__(self, key)
-        except:
-            self.load()
-            value = dict.__getitem__(self, key)
-        return value
-
-    def __setitem__(self, key, item):
-        dict.__setitem__(self, key, item)
-        
-        tempDict = {}
-        tempDict.update(self)
-
-        try:
-            persistent = sob.Persistent(tempDict, 'settings')
-            persistent.save(filename='.mxit')
-        except Exception:
-            print 'unable to save settings'
-
 class MXit(dict):
     def __init__(self):
         #Create a dictionary that is persistant across all sessions
         
-        self['settings'] = Settings()
+        #self.settings = Settings()
+        self.settings = shelve.open('mxit.settings')
 
         self['windows'] = {}
         self['contactCallback'] = []
@@ -86,14 +54,13 @@ class MXit(dict):
         self['loggedIn'] = False
         self['transport'] = 'socket'    #TODO: make HTTP work as well
         self['messageQueue'] = Queue()
-        print self['messageQueue']
         self['receivedMessageQueue'] = Queue()
 
         self.initialise()
-    
+
     def initConnection(self):
         #Give default values if we don't have any settings
-        hostname = self['settings']['soc1'].split('//')[1].split(':')[0]
+        hostname = self.settings['soc1'].split('//')[1].split(':')[0]
         port = 9119
 
         self.protocolThread = MXitProtocolThread(hostname, port, self)
@@ -104,20 +71,20 @@ class MXit(dict):
         #self['tray'] = TrayIcon(self)
         self['sound'] = Sound(self)
         self['MainWindow'] = ApplicationWindow(self)
-        if not self['settings'].has_key('category'):
+        if not self.settings.has_key('category'):
             self['ActivationWindow'] = ActivationWindow(self)
             pass
         else:
             self.initConnection()
             try:
-                if self['settings']['autoLogin']:
+                if self.settings['autoLogin']:
                     self.do_login()
                 else:
                     LoginWindow(self)
             except:
                 LoginWindow(self)
             #Not sure when I should take this out
-            if self['settings']['category'] == '0':
+            if self.settings['category'] == '0':
                 #self.on_registerItem_activate(None)
                 print 'Registration not complete!!'
 
@@ -161,7 +128,7 @@ class MXit(dict):
         if isinstance(msg, ClientMessage):
             print 'Attempting to send',msg.__class__
             if self['transport'] == 'socket':
-                toBeSent = socketBuildClientMessage(self['settings']['loginname'], msg.getMessage())
+                toBeSent = socketBuildClientMessage(self.settings['loginname'], msg.getMessage())
             elif self['transport'] == 'http':
                 pass
             msg.messageSent()
@@ -176,16 +143,17 @@ class MXit(dict):
 
         if password == None:
             try:
-                password = self['settings']['password']
+                password = self.settings['password']
             except KeyError:
                 #If password isn't in settings this means that last time login failed. Show window instead
-                #Password is actually stored in ['settings']['tempPassword']. Remove it because it is likely
+                #Password is actually stored in .settings['tempPassword']. Remove it because it is likely
                 #incorrect
-                del self['settings']['tempPassword']
+                del self.settings['tempPassword']
                 LoginWindow(self)
                 return
         
         #TODO: Allow user to select locale and language. No really... do this
+        #I'm being for real now
         locale = 'en'
         loginMessage = LoginMessage(password, locale, self)
         self.sendMsg(loginMessage)
@@ -193,8 +161,8 @@ class MXit(dict):
     def do_logout(self):
         from protocol.commands import LogoutMessage
         self.sendMsg(LogoutMessage(self))
-        #If we never got confirmation after 40 seconds force close
-        gobject.timeout_add(40*1000, gtk.main_quit)
+        self.settings.close()
+        #gobject.timeout_add(40*1000, gtk.main_quit)
     
     def do_keepalive(self):
         from protocol.commands import KeepAliveMessage
@@ -207,9 +175,11 @@ try:
     libc = ctypes.CDLL('libc.so.6')
     libc.prctl(15,'MXitPC',0,0,0)
 except:
-    #ctypes only works on windows
+    #ctypes only works on Unix
     pass
 
+#Setup gtk theme
 gtk.rc_parse(os.path.join('gtk-2.0', 'gtkrc'))
+#Start application
 MXit()
 reactor.run()
