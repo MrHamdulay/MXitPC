@@ -36,6 +36,8 @@ from sound import Sound
 
 gtk.gdk.threads_init()
 
+import traceback
+
 class MXit:
     ''' Main application class, everything is stored and happens through here '''
     def __init__(self):
@@ -54,6 +56,7 @@ class MXit:
 
         self.sound = Sound(self)
         self.main_window = ApplicationWindow(self)
+        self.MainWindow = self.main_window
         if not self.settings.has_key('category'):
             self.activation_window = ActivationWindow(self)
         else:
@@ -116,6 +119,9 @@ class MXit:
             commands.handle_default(command, error_code, message, error_message, self)
     
     def send_message(self, msg):
+        self.protocol.send(msg)
+
+    def sendMsg(self, msg):
         self.protocol.send(msg)
             
     def do_login(self, password=None):

@@ -60,7 +60,7 @@ class ChatTab(gtk.ScrolledWindow):
         print data
         if data[0] == 'send':
             message = Message(self.contact.contactAddress, data[1])
-            self.mxit.sendMsg(message)
+            self.mxit.send_message(message)
             self.parseAndInsertMessage(0, time.time(), 1, 0, data[1])
         
     def _sanitiseMessage(self, message):
@@ -200,7 +200,7 @@ class ChatWindow:
             pass
 
     def initCallbacks(self):
-        self.mxit.contactCallback.append(self.on_contact_modified)
+        self.mxit.contact_callback.append(self.on_contact_modified)
 
     def get_active_tab(self):
         return self.notebook.get_nth_page(self.notebook.get_current_page())
@@ -302,7 +302,7 @@ class ChatWindow:
         contactAddress = self.get_active_tab().contact.contactAddress
         
         message = Message(contactAddress, msg)
-        self.mxit.sendMsg(message)
+        self.mxit.send_message(message)
         
         self.get_active_tab().parseAndInsertMessage(0, time.time(), 1, 0, msg)
         

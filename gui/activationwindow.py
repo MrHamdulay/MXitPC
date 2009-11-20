@@ -105,7 +105,7 @@ class ActivationWindow:
 
     def received_challenge_reply_reply(self, challengeData):
         self.connectionInformation = challengeData
-        self.mxit['settings'].update(challengeData)
+        self.mxit.settings.update(challengeData)
         self.animationCancelEvent.set()
         self.assistant.set_page_complete(self.assistant.get_nth_page(2), True)
         if challengeData['category'] == '1':
@@ -126,7 +126,7 @@ class ActivationWindow:
         self.assistant.hide()
         self.assistant.destroy()
 
-        self.mxit.initConnection()
+        self.mxit.init_connection()
         LoginWindow(self.mxit)
 
     def load_captcha(self, captchaImageData):

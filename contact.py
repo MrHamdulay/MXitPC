@@ -47,23 +47,35 @@ class Contact:
         ''' Contact was updated (i.e presence, mood or nickname changed)
             activate required callbacks etc. '''
             
-        #Check for changes
-        if not nickname == self.nickname:
-            self.nickname = nickname
-            for callback in mxit.contactCallback:
-                callback(nickname, self, 'nickname')
+        try:
+            #Check for changes
+            if not nickname == self.nickname:
+                self.nickname = nickname
+                for callback in mxit.contact_callback:
+                    callback(nickname, self, 'nickname')
+        except:
+            pass
                 
-        if not group == self.group:
-            self.group = group
-            for callback in mxit.contactCallback:
-                callback(group, self, 'group')
+        try:
+            if not group == self.group:
+                self.group = group
+                for callback in mxit.contact_callback:
+                    callback(group, self, 'group')
+        except:
+            pass
                 
-        if not presence == self.presence:
-            self.presence = presence
-            for callback in mxit['contactCallback']:
-                callback(presence, self, 'presence')
+        try:
+            if not presence == self.presence:
+                self.presence = presence
+                for callback in mxit.contact_callback:
+                    callback(presence, self, 'presence')
+        except:
+            pass
     
-        if not mood == self.mood:
-            self.mood = mood
-            for callback in mxit.contactCallback:
-                callback(mood, self, 'mood')
+        try:
+            if not mood == self.mood:
+                self.mood = mood
+                for callback in mxit.contact_callback:
+                    callback(mood, self, 'mood')
+        except:
+            pass
