@@ -1,17 +1,16 @@
 #!/usr/bin/env python
-import sys
+#import sys
 import os.path
 import shelve
 
-'''Messed up hack for py2exe'''
-if hasattr(sys, 'frozen'):
-    workingdir = os.path.dirname(unicode(sys.executable, sys.getfilesystemencoding()))
+#Messed up hack for py2exe
+'''if hasattr(sys, 'frozen'):
+    working_dir = os.path.dirname(unicode(sys.executable, sys.getfilesystemencoding()))
 else:
-    workingdir = os.path.dirname(sys.argv[0])
+    working_dir = os.path.dirname(sys.argv[0])'''
 
 #sys.stdout = open('mxit.log', 'w')
 #sys.stderr = open('mxit.err.log', 'w')
-import threading
 import gobject
 
 '''TODO: Remove dependency on twisted'''
@@ -19,7 +18,6 @@ from twisted.internet import gtk2reactor
 try:
     gtk2reactor.install()
 except AssertionError:
-    #We are most likely debugging
     pass
 from twisted.internet import reactor
 
@@ -27,8 +25,7 @@ import gtk
 
 from protocol.constants import COMMANDS
 from protocol import commands
-from protocol.commands import SetMoodMessage
-from protocol.mxitprotocol import MXitProtocol, parseServerMsg, socketBuildClientMessage 
+from protocol.mxitprotocol import MXitProtocol, parseServerMsg
 
 from gui.applicationwindow import ApplicationWindow
 from gui.activationwindow import ActivationWindow
@@ -40,6 +37,7 @@ from sound import Sound
 gtk.gdk.threads_init()
 
 class MXit:
+    ''' Main application class, everything is stored and happens through here '''
     def __init__(self):
         #Create a dictionary that is persistant across all sessions
         
@@ -47,18 +45,31 @@ class MXit:
         self.settings = shelve.open('mxit.settings')
 
         self.windows = {}
-        self.contactCallback = []
+        self.contact_callback = []
 
         self.connected = False
-        self.loggedIn = False
+        self.logged_in = False
         self.transport = 'socket'    #TODO: make HTTP work as well
+        self.protocol = None
 
-        self.initialise()
+        self.sound = Sound(self)
+        self.main_window = ApplicationWindow(self)
+        if not self.settings.has_key('category'):
+            self.activation_window = ActivationWindow(self)
+        else:
+            self.init_connection()
+            try:
+                if self.settings['autoLogin']:
+                    self.do_login()
+                else:
+                    raise Exception
+            except:
+                LoginWindow(self)
 
     def tempErr(self, message):
         print 'Error occured: ', message 
 
-    def initConnection(self):
+    def init_connection(self):
         #Give default values if we don't have any settings
         hostname = self.settings['soc1'].split('//')[1].split(':')[0]
         port = 9119
@@ -67,32 +78,11 @@ class MXit:
         self.protocol.addReceivedMessageHook(self.handleMsg)
         self.protocol.addErrorOccuredHook(self.tempErr)
         self.protocol.start()
-        #self.protocolThread.run()
 
-    def initialise(self):
-        #self['tray'] = TrayIcon(self)
-        self.sound = Sound(self)
-        self.MainWindow = ApplicationWindow(self)
-        if not self.settings.has_key('category'):
-            self.ActivationWindow = ActivationWindow(self)
-            pass
-        else:
-            self.initConnection()
-            try:
-                if self.settings['autoLogin']:
-                    self.do_login()
-                else:
-                    LoginWindow(self)
-            except:
-                LoginWindow(self)
-            #Not sure when I should take this out
-            if self.settings['category'] == '0':
-                #self.on_registerItem_activate(None)
-                print 'Registration not complete!!'
 
     def handleMsg(self, data):
         '''Parses and handles received server messages '''
-        originaldata = data
+        original_data = data
         if self.transport == 'socket':
             data = parseServerMsg(data)
         elif self.transport == 'http':
@@ -101,32 +91,31 @@ class MXit:
         try:
             command = int(data[0])
         except:
-            log.err('For some reason we couldn\'t parse command: %s' % data)
             return
             
         try:
-            errorCode = int(data[1])
-            errorMessage = None
+            error_code = int(data[1])
+            error_message = None
         except TypeError:
-            errorCode = int(data[1][0])
-            errorMessage = data[1][1]
-            print errorCode, errorMessage
+            error_code = int(data[1][0])
+            error_message = data[1][1]
+            print error_code, error_message
             gobject.timeout_add(0, errorDialog, errorMessage)
               
         #When dealing with chunks we shouldn't parse the message. Otherwise we get messed up
         #binary data
         if command == 27:
-            message = originaldata.split('\0', 2)[2]
+            message = original_data.split('\0', 2)[2]
         else:
             message = data[2:]
           
         try:
             func = getattr(commands, "handle_%s" % COMMANDS[command])
-            func(errorCode, errorMessage, message, self)
+            func(error_code, error_message, message, self)
         except AttributeError:
-            commands.handle_default(command, errorCode, message, errorMessage, self)
+            commands.handle_default(command, error_code, message, error_message, self)
     
-    def sendMsg(self, msg):
+    def send_message(self, msg):
         self.protocol.send(msg)
             
     def do_login(self, password=None):
@@ -147,7 +136,7 @@ class MXit:
         #I'm being for real now
         locale = 'en'
         loginMessage = LoginMessage(password, locale, self)
-        self.sendMsg(loginMessage)
+        self.send_message(loginMessage)
     
     def do_logout(self):
         from protocol.commands import LogoutMessage
@@ -164,7 +153,7 @@ class MXit:
 try:
     import ctypes
     libc = ctypes.CDLL('libc.so.6')
-    libc.prctl(15,'MXitPC',0,0,0)
+    libc.prctl(15, 'MXitPC', 0, 0, 0)
 except:
     #ctypes only works on Unix
     pass

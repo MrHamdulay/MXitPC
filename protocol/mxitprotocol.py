@@ -38,10 +38,20 @@ class MXitProtocol:
     
     _messageQueue = Queue.Queue()
 
+    receivedMessageHooks = []
+    errorOccuredHooks = []
+    
     def __init__(self, hostname, port, loginname):
         self._hostname = hostname
         self._port = port
         self._loginname = loginname
+
+    def login(self, password=None):
+        if password == None:
+            raise RuntimeException('No password given')
+        locale = 'en'
+        message = LoginMessage(password, locale, None)
+        self.send(message)
 
     def send(self, message):
         if isinstance(message, ClientMessage):
@@ -51,8 +61,6 @@ class MXitProtocol:
             data = message
         self._messageQueue.put(data)
 
-    receivedMessageHooks = []
-    errorOccuredHooks = []
 
     def addReceivedMessageHook(self, function):
         self.receivedMessageHooks.append(function)
