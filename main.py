@@ -11,7 +11,6 @@ else:
 
 #sys.stdout = open('mxit.log', 'w')
 #sys.stderr = open('mxit.err.log', 'w')
-from Queue import Queue
 import threading
 import gobject
 
@@ -28,8 +27,8 @@ import gtk
 
 from protocol.constants import COMMANDS
 from protocol import commands
-from protocol.commands import ClientMessage, SetMoodMessage
-from protocol.mxitprotocol import MXitProtocolThread, parseServerMsg, socketBuildClientMessage 
+from protocol.commands import SetMoodMessage
+from protocol.mxitprotocol import MXitProtocol, parseServerMsg, socketBuildClientMessage 
 
 from gui.applicationwindow import ApplicationWindow
 from gui.activationwindow import ActivationWindow
@@ -40,39 +39,42 @@ from sound import Sound
 
 gtk.gdk.threads_init()
 
-class MXit(dict):
+class MXit:
     def __init__(self):
         #Create a dictionary that is persistant across all sessions
         
         #self.settings = Settings()
         self.settings = shelve.open('mxit.settings')
 
-        self['windows'] = {}
-        self['contactCallback'] = []
+        self.windows = {}
+        self.contactCallback = []
 
-        self['connected'] = False
-        self['loggedIn'] = False
-        self['transport'] = 'socket'    #TODO: make HTTP work as well
-        self['messageQueue'] = Queue()
-        self['receivedMessageQueue'] = Queue()
+        self.connected = False
+        self.loggedIn = False
+        self.transport = 'socket'    #TODO: make HTTP work as well
 
         self.initialise()
+
+    def tempErr(self, message):
+        print 'Error occured: ', message 
 
     def initConnection(self):
         #Give default values if we don't have any settings
         hostname = self.settings['soc1'].split('//')[1].split(':')[0]
         port = 9119
 
-        self.protocolThread = MXitProtocolThread(hostname, port, self)
-        self.protocolThread.start()
+        self.protocol = MXitProtocol(hostname, port, self.settings['loginname'])
+        self.protocol.addReceivedMessageHook(self.handleMsg)
+        self.protocol.addErrorOccuredHook(self.tempErr)
+        self.protocol.start()
         #self.protocolThread.run()
 
     def initialise(self):
         #self['tray'] = TrayIcon(self)
-        self['sound'] = Sound(self)
-        self['MainWindow'] = ApplicationWindow(self)
+        self.sound = Sound(self)
+        self.MainWindow = ApplicationWindow(self)
         if not self.settings.has_key('category'):
-            self['ActivationWindow'] = ActivationWindow(self)
+            self.ActivationWindow = ActivationWindow(self)
             pass
         else:
             self.initConnection()
@@ -91,9 +93,9 @@ class MXit(dict):
     def handleMsg(self, data):
         '''Parses and handles received server messages '''
         originaldata = data
-        if self['transport'] == 'socket':
+        if self.transport == 'socket':
             data = parseServerMsg(data)
-        elif self['transport'] == 'http':
+        elif self.transport == 'http':
             pass
 
         try:
@@ -125,18 +127,7 @@ class MXit(dict):
             commands.handle_default(command, errorCode, message, errorMessage, self)
     
     def sendMsg(self, msg):
-        if isinstance(msg, ClientMessage):
-            print 'Attempting to send',msg.__class__
-            if self['transport'] == 'socket':
-                toBeSent = socketBuildClientMessage(self.settings['loginname'], msg.getMessage())
-            elif self['transport'] == 'http':
-                pass
-            msg.messageSent()
-        else:
-            toBeSent = self._buildClientMessage(msg)
-
-        self['messageQueue'].put(toBeSent)
-        #self.protocolThread.send(toBeSent)
+        self.protocol.send(msg)
             
     def do_login(self, password=None):
         from protocol.commands import LoginMessage

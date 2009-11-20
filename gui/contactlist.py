@@ -153,7 +153,7 @@ class ContactList:
             row[3] = self.presencePixbufs[presence]
             #Move to callback for contact
             if row[4] == OFFLINE and not presence == OFFLINE:
-                reactor.callLater(0, self.mxit['sound'].contact_online)
+                reactor.callLater(0, self.mxit.sound.contact_online)
             row[4] = presence
         if not mood == None:
             row[5] = self.moodPixbufs[mood]

@@ -50,12 +50,12 @@ class Contact:
         #Check for changes
         if not nickname == self.nickname:
             self.nickname = nickname
-            for callback in mxit['contactCallback']:
+            for callback in mxit.contactCallback:
                 callback(nickname, self, 'nickname')
                 
         if not group == self.group:
             self.group = group
-            for callback in mxit['contactCallback']:
+            for callback in mxit.contactCallback:
                 callback(group, self, 'group')
                 
         if not presence == self.presence:
@@ -65,5 +65,5 @@ class Contact:
     
         if not mood == self.mood:
             self.mood = mood
-            for callback in mxit['contactCallback']:
+            for callback in mxit.contactCallback:
                 callback(mood, self, 'mood')

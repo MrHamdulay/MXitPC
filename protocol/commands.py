@@ -62,18 +62,18 @@ def handle_login(errorCode, errorMessage, message, mxit):
     #Make sure that on next login we get a login screen and not the registration screen
     mxit.settings['registered'] = '1'
     #Temporary store password to be used for auto login
-    mxit.settings['password'] = mxit.settings['tempPassword']
+    mxit.settings['password'] = mxit.tempPassword
  
     sesid = message[0]
     message = message[1]
         
-    gobject.timeout_add(0, mxit['MainWindow'].setStatusLabel, 'Online')
-    mxit['loggedIn'] = True
-    if mxit['windows'].has_key('LoginWindow'):
-        gobject.timeout_add(0, mxit['windows']['LoginWindow'].window.destroy)
+    gobject.timeout_add(0, mxit.MainWindow.setStatusLabel, 'Online')
+    mxit.loggedIn = True
+    if mxit.windows.has_key('LoginWindow'):
+        gobject.timeout_add(0, mxit.windows['LoginWindow'].window.destroy)
     #Used when we need to reconnect
-    mxit['connectionProxy'] = message[3]
-    mxit['pricePlan'] = message[5]
+    mxit.settings['connectionProxy'] = message[3]
+    mxit.settings['pricePlan'] = message[5]
         
     #Todo: Find the sweet spot for this and put it in the settings file
     reactor.callLater(120, mxit.do_keepalive)
@@ -93,7 +93,7 @@ class RequestContactsMessage(ClientMessage):
         self.command = 3
         
 def handle_get_contacts(errorCode, errorMessage, message, mxit,):
-    gobject.timeout_add(0, mxit['contactStore'].parseContactList, message)
+    gobject.timeout_add(0, mxit.contactStore.parseContactList, message)
         
 class UpdateContactInfoMessage(ClientMessage):
     #Todo: finish
@@ -119,7 +119,7 @@ class RemoveContactMessage(ClientMessage):
 
 def handle_receive_messages(errorCode, errorMessage, data, mxit):
     def received_message(contactAddress, timestamp, type, msg, id, flags):
-        chatTab = mxit['MainWindow'].openChatTab(contactAddress)
+        chatTab = mxit.MainWindow.openChatTab(contactAddress)
         chatTab.receiveMessage(contactAddress, timestamp, type, msg, id, flags)
         
     contactAddress = data[0][0]
@@ -172,23 +172,23 @@ def handle_register(errorCode, errorMessage, message, mxit):
         return
     mxit.settings['registered'] = True 
     mxit.settings['category'] = '1'
-    mxit.settings['password'] = mxit['tempPassword']
+    mxit.settings['password'] = mxit.tempPassword
     
-    gobject.timeout_add(0, mxit['MainWindow'].setStatusLabel, 'Logged in')
+    gobject.timeout_add(0, mxit.MainWindow.setStatusLabel, 'Logged in')
     mxit.settings['connectionProxy'] = message[1][3]
     mxit.settings['pricePlan'] = message[1][3]
     mxit.settings['flags'] = message[1][6]
     mxit.settings['hiddenLoginname'] = message[2]
 
-    gobject.timeout_add(0, mxit['ActivationWindow'].__del__)
-    #del mxit['ActivationWindow'] 
+    gobject.timeout_add(0, mxitActivationWindow.__del__)
+    #del mxit.ActivationWindow 
                           
     gobject.timeout_add(240*1000, mxit.do_keepalive)
     
 class UpdateProfileMessage(ClientMessage):
     def __init__(self, password, name, hideLoginName, dob, gender, mxit):
         self.command = 12
-        mxit['tempPassword'] = password
+        mxit.tempPassword = password
         password = Pin(password, mxit.settings['pid'])
         if hideLoginName:
             hideLoginName = '1'
@@ -204,7 +204,7 @@ class UpdateProfileMessage(ClientMessage):
 def handle_update_profile(errorCode, errorMessage, message, mxit):
     try:
         #Remember to change the password in settings only once we get this confirmation
-        mxit.settings['password'] = mxit['tempPassword']
+        mxit.settings['password'] = mxit.tempPassword
     except KeyError:
         #For some reason this happens... find out why
         pass
@@ -225,7 +225,7 @@ class GetProfileMessage(ClientMessage):
 def handle_get_profile(errorCode, errorMessage, message, mxit):
     if not errorCode == 0:
         pass
-    gobject.timeout_add(0, mxit['get_profile_callback'], message)
+    gobject.timeout_add(0, mxit.get_profile_callback, message)
 
 class SetPresenceMessage(ClientMessage):
     ''' Sets user presence and status '''

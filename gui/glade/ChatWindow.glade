@@ -143,7 +143,7 @@
                 <property name="wrap_mode">word</property>
                 <property name="left_margin">2</property>
                 <property name="right_margin">2</property>
-                <signal name="key_press_event" handler="on_keypress"/>
+                <signal name="key_release_event" handler="on_keypress"/>
               </object>
             </child>
           </object>

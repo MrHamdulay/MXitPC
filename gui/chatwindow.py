@@ -7,7 +7,7 @@ import gtk
 try:
     import gtkspell
 except ImportError:
-    #No windows build for gtkspell
+    #No Windows build for gtkspell
     pass
 
 import os.path
@@ -126,14 +126,14 @@ class ChatTab(gtk.ScrolledWindow):
         
         if not self.parentWindow.get_active_tab() == self:
             self.parentWindow.notebook.set_tab_label(self, self.parentWindow.create_tab_label(True, self.contact))
-            self.mxit['contactStore'].updateRow(contactAddress, messageAvailable=1)
+            self.mxit.contactStore.updateRow(contactAddress, messageAvailable=1)
         else:
-            self.mxit['contactStore'].updateRow(contactAddress, messageAvailable=0)
+            self.mxit.contactStore.updateRow(contactAddress, messageAvailable=0)
             
-        self.mxit['sound'].message_received()
+        self.mxit.sound.message_received()
             
     def receivedFocus(self, window, *args):
-        self.mxit['contactStore'].updateRow(self.contact.contactAddress, messageAvailable=0)
+        self.mxit.contactStore.updateRow(self.contact.contactAddress, messageAvailable=0)
 
 class MultiMxTab(ChatTab):
     def __init__(self, contact, parent, mxit):
@@ -200,7 +200,7 @@ class ChatWindow:
             pass
 
     def initCallbacks(self):
-        self.mxit['contactCallback'].append(self.on_contact_modified)
+        self.mxit.contactCallback.append(self.on_contact_modified)
 
     def get_active_tab(self):
         return self.notebook.get_nth_page(self.notebook.get_current_page())

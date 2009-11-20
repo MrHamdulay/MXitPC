@@ -60,7 +60,7 @@ class ApplicationWindow:
 
         self.builder.get_object('presenceItem').set_image(gtk.image_new_from_file(os.path.join('gui', 'images', 'presence', '1.png')))
         
-        self.mxit['contactStore'] = ContactList(self.builder.get_object('ContactListTreeView'), self.mxit)
+        self.mxit.contactStore = ContactList(self.builder.get_object('ContactListTreeView'), self.mxit)
         
         self.builder.connect_signals(self)
         self.initMenuIcons()
@@ -124,11 +124,16 @@ class ApplicationWindow:
         self.mxit['windows']['RegistrationWindow'] = RegistrationWindow(self.mxit)
         
     def openChatTab(self, contactAddress):
-        if not self.mxit.has_key('activeChatWindow'):
-                self.mxit['activeChatWindow'] = ChatWindow(self.mxit)
+        try:
+            self.mxit.activeChatWindow.create_chat_tab(self.mxit.contactStore.getContact(contactAddress))
+        except AttributeError:
+            self.mxit.activeChatWindow = ChatWindow(self.mxit)
               
-        self.mxit['activeChatWindow'].create_chat_tab(self.mxit['contactStore'].getContact(contactAddress))
-        return self.mxit['activeChatWindow'].tabList[contactAddress]
+        try:
+            return self.mxit.activeChatWindow.tabList[contactAddress]
+        except KeyError:
+            print self.mxit.activeChatWindow.tabList
+            raise
         
     def on_ContactListTreeView_row_activated(self, treeView, path, viewcolumn, userData = None):
         ''' Called when user double-clicks on friend in friend list '''
@@ -169,9 +174,7 @@ class ApplicationWindow:
     
     def on_MainWindow_destroy(self, widget):
         widget.destroy()
-        
-        if self.mxit.has_key('loggedIn') and self.mxit['loggedIn']:
-            self.mxit.do_logout()
+        self.mxit.do_logout()
             
     def on_mood_changed(self, menuitem, *args):
         mood = MOODS.index(menuitem.get_name()[:-4])

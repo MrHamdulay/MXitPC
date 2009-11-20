@@ -4,6 +4,7 @@ import gobject
 import Queue
 import select
 
+from protocol.commands import ClientMessage
 from gui.errordialog import errorDialog
 
 def parseServerMsg(msg):
@@ -31,37 +32,81 @@ def socketBuildClientMessage(loginname, msgArgs):
     message = 'ln=%d\0%s' % (len(message), message)
     return message 
 
+class MXitProtocol:
+    _started = False
+    _thread = None
+    
+    _messageQueue = Queue.Queue()
+
+    def __init__(self, hostname, port, loginname):
+        self._hostname = hostname
+        self._port = port
+        self._loginname = loginname
+
+    def send(self, message):
+        if isinstance(message, ClientMessage):
+            data = socketBuildClientMessage(self._loginname, message.getMessage())
+            message.messageSent()
+        else:
+            data = message
+        self._messageQueue.put(data)
+
+    receivedMessageHooks = []
+    errorOccuredHooks = []
+
+    def addReceivedMessageHook(self, function):
+        self.receivedMessageHooks.append(function)
+
+    def addErrorOccuredHook(self, function):
+        self.errorOccuredHooks.append(function)
+
+    def start(self):
+        if self._started:
+            return
+        thread = MXitProtocolThread(self._hostname, self._port, self._messageQueue)
+        thread.receivedMessageHooks = self.receivedMessageHooks
+        thread.errorOccuredHooks = self.errorOccuredHooks
+        thread.start()
+
+    def stop(self):
+        thread.dismiss()
+
 class MXitProtocolThread(threading.Thread):
-    def __init__(self, hostname, port, mxit):
+    connected = False
+    daemon = True
+    _dismiss = threading.Event()
+    _buffer = None
+
+    receivedMessageHooks = None
+    errorOccuredHooks = None
+
+    def __init__(self, hostname, port, messageQueue):
         threading.Thread.__init__(self, group=None)
-        self.daemon = True
-        self.mxit = mxit
-        self.messageQueue = self.mxit['messageQueue']
-        self._dismiss = threading.Event()
+        self.messageQueue = messageQueue
 
         self.hostname = hostname
         self.port = port
 
-    def dismiss(self):
-        self._dismiss.set()
-
     def run(self):
-        print 'Protocol thread started'
-        protocol = MXitProtocol(Queue.Queue(), self.mxit)
-        protocol.connect(self.hostname, self.port)
+        ''' Protocol thread runner, checks if their is data to be sent and/or received. Does appropriate actions '''
+        self.connect()
 
         while True:
             message = ''
 
-            ready_to_read, ready_to_write, errors = select.select([protocol.socket], [protocol.socket], [protocol.socket], 1)
+            ready_to_read, ready_to_write, errors = select.select([self.socket], [self.socket], [self.socket], 1)
+            #TODO: Figure out what to do with errors
             if not errors == []:
                 pass
+            #If we have ready_to+read sockets, read from them
             for socket in ready_to_read:
-                protocol.dataReceived(socket)
+                self.dataReceived(socket)
 
+            #Check if we have been told to shutdown
             if self._dismiss.is_set():
                 break
 
+            #Check if we their are any messages to be sent and send them
             try:
                 message = self.messageQueue.get(True, 1)
             except Queue.Empty:
@@ -70,59 +115,49 @@ class MXitProtocolThread(threading.Thread):
             except AttributeError:
                 pass
             else:
-                if self._dismiss.is_set():
-                    self.messageQueue.put(message, True, 1)
-                protocol.send(message)
+                '''if self._dismiss.is_set():
+                    self.messageQueue.put(message, True, 1)'''
+                self.socket.sendall(message)
 
-class MXitProtocol:
-    '''Don't know how I am going to do HTTP requiests don't think I can use an adapter
-    Think about maybe not using twisted library for that. But then there is going to be
-    lots of redundancy on lots of stuff '''
-    
-    _buffer = None
+    def dismiss(self):
+        self._dismiss.set()
 
-    def __init__(self, receivedMessagesQueue, mxit):
-        self.connected = False
-        self.receivedMessagesQueue = receivedMessagesQueue
-        self.mxit = mxit
-
-    def connect(self, hostname, port):
+    def connect(self):
         if self.connected:
             raise RuntimeException, 'Already connected'
         self.socket = socket.socket()
         try:
-            self.socket.connect((hostname, port))
+            self.socket.connect((self.hostname, self.port))
         except IOError:
-            gobject.idle_add(lambda: errorDialog('Unable to connect to MXit server.', True))
+            [gobject.idle_add(errFunction, "Unable to connect to MXit server", True) for errFunction in errorOccuredHooks]
+            return
 
-        self.mxit['connected'] = True
         self.connected = True
 
-        #gobject.io_add_watch(self.socket, gobject.IO_IN, self.dataReceived)
-        #gobject.io_add_watch(self.socket, gobject.IO_HUP, self.lostConnection)
-
-    def lostConnection(self, socket, condition):
-        print 'Lost connection to MXit'
-        errorDialog('Connection to mxit lost. Reconnecting')
-        
     def dataReceived(self, socket, *args):
+        ''' Called when their is data on the socket. Adds data to buffer and attempts to parse it '''
         data = socket.recv(1024)
+        #If we for some reason have received no data, simply return
         if len(data) == 0:
             return True
+        #Add data to buffer
         if not self._buffer == None:
             self._buffer += data
         else:
             self._buffer = data
             
+        #Parse data
         self._parseData()
         return True
-        
+
     def _parseData(self):
         pos = self._buffer.find('ln=')
+        #If we can't find length header just return
         if pos == -1:
-            #Not supposed to happen
             return
+        #Remove length header
         self._buffer = self._buffer[pos:]
+        #Get length of current message
         try:
             self._length_end = self._buffer.find('\0')
             self._length = int(self._buffer[3:self._length_end])
@@ -130,33 +165,31 @@ class MXitProtocol:
             self._length = -1
             self._length_end = -1
             
+        #Check if we have full message from length header, if we don't wait until we do
         if not (len(self._buffer[self._length_end+1:]) >= self._length):
-            #Message not fully received yet
             return
         
-        ''' You may be tempted to remove the 1 at the end of this...
-        DONT!! Otherwise the last byte of every text message will be removed.
-        On most messages this is \0 but on text messages it could be an important
-        character '''
+        #Get all data in this message
         data = self._buffer[self._length_end+1:self._length+self._length_end+1]
+        #Check if we got proper data, if not just clear the buffer. this shouldn't be happening very often
         if len(data) == 0:
             self._buffer = ''
             return
         
+        #Remove the last character if it's a nonsense character
         if data[-1] in '\0\1':
             data = data[:-1]
 
+        #Remove current message from buffer
         self._buffer = self._buffer[self._length_end+self._length+1:]
+        #Set temp variables to default
         self._length = -1
         self._length_end = -1
         
-        #If using one thread doesn't work create another one to handle all this shit
-        #self.receivedMessagesQueue.put(data, True, 5)
-        self.mxit.handleMsg(data)
-        #gobject.idle_add(self.mxit.handleMsg, data)
+        #Call message received hooks
+        [gobject.idle_add(function, data) for function in self.receivedMessageHooks]
+
+        #If their is more data in the buffer, attempt to parse it
         if len(self._buffer):
             self._parseData()
         
-    def send(self, data):
-        print 'sending data'
-        self.socket.sendall(data)
