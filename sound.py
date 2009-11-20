@@ -13,8 +13,8 @@ import os.path
 from twisted.internet import reactor
     
 class Sound:
-    def __init__(self, applicationSession):
-        self.applicationSession = applicationSession
+    def __init__(self, mxit):
+        self.mxit = mxit
         if winsound == None:
             self.player = gst.element_factory_make("playbin", "player")
             bus = self.player.get_bus()
@@ -24,7 +24,7 @@ class Sound:
             
     def message_received(self):
         try:
-            if not self.applicationSession['settings']['newMessageAlert']:
+            if not self.mxit.settings['newMessageAlert']:
                 return
         except KeyError:
             pass
@@ -32,7 +32,7 @@ class Sound:
         
     def contact_online(self):
         try:
-            if not self.applicationSession['settings']['contactOnlineAlert']:
+            if not self.mxit.settings['contactOnlineAlert']:
                 return
         except KeyError:
             pass
@@ -40,7 +40,7 @@ class Sound:
         
     def invite_received(self):
         try:
-            if not self.applicationSession['settings']['contactInviteAlert']:
+            if not self.mxit.settings['contactInviteAlert']:
                 return
         except KeyError:
             pass

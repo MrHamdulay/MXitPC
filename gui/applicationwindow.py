@@ -129,11 +129,8 @@ class ApplicationWindow:
         except AttributeError:
             self.mxit.activeChatWindow = ChatWindow(self.mxit)
               
-        try:
-            return self.mxit.activeChatWindow.tabList[contactAddress]
-        except KeyError:
-            print self.mxit.activeChatWindow.tabList
-            raise
+        self.mxit.activeChatWindow.create_chat_tab(self.mxit.contactStore.getContact(contactAddress))
+        return self.mxit.activeChatWindow.tabList[contactAddress]
         
     def on_ContactListTreeView_row_activated(self, treeView, path, viewcolumn, userData = None):
         ''' Called when user double-clicks on friend in friend list '''
