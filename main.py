@@ -99,7 +99,7 @@ class MXit(dict):
         try:
             command = int(data[0])
         except:
-            log.err('For some reason we couldn\'t parse command: %s' % data)
+            print 'For some reason we couldn\'t parse command: ', data
             return
             
         try:
