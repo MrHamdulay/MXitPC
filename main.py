@@ -9,8 +9,10 @@ import shelve
 else:
     working_dir = os.path.dirname(sys.argv[0])'''
 
-#sys.stdout = open('mxit.log', 'w')
-#sys.stderr = open('mxit.err.log', 'w')
+#TODO: Implement proper logging
+import sys
+sys.stdout = open('mxit.log', 'w')
+sys.stderr = open('mxit.err.log', 'w')
 import gobject
 
 '''TODO: Remove dependency on twisted'''
@@ -94,6 +96,7 @@ class MXit:
         try:
             command = int(data[0])
         except:
+            print 'For some reason we couldn\'t parse command: ', data
             return
             
         try:

@@ -65,10 +65,11 @@ class ChatTab(gtk.ScrolledWindow):
         
     def _sanitiseMessage(self, message):
         #Unneeded for some reason
-        return message.replace('<', '&lt').replace('>', '&gt').replace('&', '&amp;').replace('\n', '<br />\n')
+        return message.replace('<', '&lt;').replace('>', '&gt;').replace('&', '&amp;').replace('\n', '<br />\n')
         
     def _parseMessage(self, message):
         #Convert MXit markup to HTML for use in textview
+        message = self._sanitiseMessage(message)
         for expression, file in SMILEYS.iteritems():
             tag = '<img src="file://%s" />' % (os.path.join('gui', 'images', 'chatemoti', file))
             message = re.sub(expression, tag, message)
@@ -84,7 +85,7 @@ class ChatTab(gtk.ScrolledWindow):
             pass
         #self.scroll_to_iter(end_iter, 0.1, True, 0.0, 0.5)
         self.textview.scroll_to_iter(self.textview.get_buffer().get_end_iter(), 0.1)
-        
+    
     def parseAndInsertMessage(self, origin, contactAddress, timestamp, type, msg):
         ''' Parse message for emoticons and MXit markup 
         
@@ -93,7 +94,7 @@ class ChatTab(gtk.ScrolledWindow):
         msg = markup.parse(msg)
         html = '<p>'
         if origin:
-            html = '%s<span style="color: red">%s </span>' % (html, self.contact.nickname)
+            html = '%s<span style="color: red">%s </span>' % (html, self._sanitiseMessage(self.contact.nickname))
             if datetime.date.today().day == datetime.datetime.fromtimestamp(timestamp).day:
                 senttime = datetime.datetime.fromtimestamp(timestamp).time().strftime('%H:%M')
             else:
@@ -156,7 +157,7 @@ class MultiMxTab(ChatTab):
             html += '<span style="color: red">%s </span>' % nickname
         else:
             html += '<span style="color: blue">You: </span>'
-        html += self._parseMessage(self._sanitiseMessage(msg))
+        html += self._parseMessage(msg)
         html += '</p>'
 
         self._insertHtml(html)

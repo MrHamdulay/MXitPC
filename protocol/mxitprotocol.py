@@ -201,3 +201,20 @@ class MXitProtocolThread(threading.Thread):
         if len(self._buffer):
             self._parseData()
         
+    def _handleMessage(self, message):
+        data = parseServerMsg(message)
+        command = int(data[0])
+
+        try:
+            error_code = int(data[1][0])
+            error_message = data[1][1]
+            [gobject.idle_add(errFunction, "%d: %s" % (error_code, error_message)) for errFunction in errorOccuredHooks]
+            return
+        except TypeError:
+            #We don't have an error Yay!
+            pass
+
+        if command == 27:
+            data = message.split('\0', 2)[2]
+        else:
+            data = data[2:]

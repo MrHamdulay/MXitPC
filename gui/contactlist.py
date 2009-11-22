@@ -161,7 +161,7 @@ class ContactList:
             row[6] = contactType
         if not messageAvailable == None:
             row[7] = self.messagesAvailable[messageAvailable]
-        
+
     def createGroup(self, groupName):
         ''' Create a group with groupName only if group doesn't exist
         
