@@ -2,6 +2,7 @@
 #import sys
 import os.path
 import shelve
+import gobject
 
 #Messed up hack for py2exe
 '''if hasattr(sys, 'frozen'):
@@ -11,9 +12,8 @@ else:
 
 #TODO: Implement proper logging
 import sys
-sys.stdout = open('mxit.log', 'w')
-sys.stderr = open('mxit.err.log', 'w')
-import gobject
+#sys.stdout = open('mxit.log', 'w')
+#sys.stderr = open('mxit.err.log', 'w')
 
 '''TODO: Remove dependency on twisted'''
 from twisted.internet import gtk2reactor
@@ -33,7 +33,6 @@ from gui.applicationwindow import ApplicationWindow
 from gui.activationwindow import ActivationWindow
 from gui.loginwindow import LoginWindow
 from gui.errordialog import errorDialog
-#from gui.trayicon import TrayIcon
 from sound import Sound
 
 gtk.gdk.threads_init()
@@ -43,9 +42,6 @@ import traceback
 class MXit:
     ''' Main application class, everything is stored and happens through here '''
     def __init__(self):
-        #Create a dictionary that is persistant across all sessions
-        
-        #self.settings = Settings()
         self.settings = shelve.open('mxit.settings')
 
         self.windows = {}

@@ -123,8 +123,6 @@ class MXitProtocolThread(threading.Thread):
             except AttributeError:
                 pass
             else:
-                '''if self._dismiss.is_set():
-                    self.messageQueue.put(message, True, 1)'''
                 self.socket.sendall(message)
 
     def dismiss(self):
