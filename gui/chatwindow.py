@@ -3,17 +3,12 @@ Created on May 14, 2009
 
 @author: Yaseen
 '''
-import gtk
-try:
-    import gtkspell
-except ImportError:
-    #No Windows build for gtkspell
-    pass
-
 import os.path
 import time
 import datetime
 import re
+
+import gtk
 
 from gui.htmltextview import HtmlTextView
 from gui.smileywindow import SmileyWindow
@@ -34,7 +29,7 @@ class ChatTab(gtk.ScrolledWindow):
 
         self.textview = HtmlTextView()
         self.textview.connect('focus-in-event', self.receivedFocus)
-        self.textview.connect('url-clicked', self.urlClicked)
+        self.textview.connect('url-clicked', self.urlClickedCallback)
         self.textview.set_wrap_mode(gtk.WRAP_WORD)
         self.textview.show()
         self.add(self.textview)
@@ -55,7 +50,7 @@ class ChatTab(gtk.ScrolledWindow):
     def isOpen(self):
         return self._open
 
-    def urlClicked(self, textview, url, type):
+    def urlClickedCallback(self, textview, url, type):
         data = url.split('|')
         print data
         if data[0] == 'send':
@@ -186,6 +181,7 @@ class ChatWindow:
         #gtk.notebook_set_window_creation_hook(self.windowCreate)
 
         try:
+            import gtkspell
             self.spell = gtkspell.Spell(self.builder.get_object('entryView'))
         except:
             pass
