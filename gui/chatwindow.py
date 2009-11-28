@@ -61,7 +61,7 @@ class ChatTab(gtk.ScrolledWindow):
     def _sanitiseMessage(self, message):
         return message.replace('<', '&lt;').replace('>', '&gt;').replace('&', '&amp;').replace('\n', '<br />\n')
         
-    def _parseMessage(self, message):
+    def _parseMessageEmoticons(self, message):
         #Convert MXit markup to HTML for use in textview
         #message = self._sanitiseMessage(message)
         for expression, file in SMILEYS.iteritems():
@@ -93,14 +93,13 @@ class ChatTab(gtk.ScrolledWindow):
         else:
             html = '%s<span style="color: blue">You: </span>' % html
             
-        html += self._parseMessage(msg)
+        html += self._parseMessageEmoticons(msg)
         html = '%s</p>' % (html)
 
         self._insertHtml(html)
 
     def contact_modified(self, modification, changed):
         if changed == 'presence':
-            print 'presence changing'
             self._insertHtml('<span style="color: grey">%s is now %s</span>' % (self.contact.nickname, PRESENCE[modification]))
             self.parentWindow.notebook.set_tab_label(self, self.parentWindow.create_tab_label(True, self.contact))
 
@@ -133,6 +132,7 @@ class MultiMxTab(ChatTab):
     def _insert_message(self, origin, timestamp, type, msg):
         nickname = self.contact.nickname
         if type == MESSAGE_TYPE_NORMAL:
+            #TODO: Convert to a regular expression
             start = msg.find('<')
             if start == -1: return
             end = msg.find('>')
