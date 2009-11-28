@@ -63,8 +63,6 @@ class MXit:
                 if self.settings['autoLogin']:
                     self.do_login()
             except Exception, e:
-                e.printStackTrace()
-                print 'sup'
                 LoginWindow(self)
 
     def tempErr(self, message):
@@ -151,7 +149,7 @@ class MXit:
     def do_keepalive(self):
         from protocol.commands import KeepAliveMessage
         self.sendMsg(KeepAliveMessage())
-        gobject.timeout_add(480*1000, self.do_keepalive)
+        #gobject.timeout_add(480*1000, self.do_keepalive)
         return False
 
 try:

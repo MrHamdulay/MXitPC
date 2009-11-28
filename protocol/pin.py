@@ -3,7 +3,8 @@ Created on May 11, 2009
 
 @author: Yaseen
 '''
-from aes import AES
+from protocol.aes import AES
+
 pyMxit = False
 class Pin(object):
     '''
