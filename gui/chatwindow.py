@@ -295,7 +295,7 @@ class ChatWindow:
         message = Message(contactAddress, msg)
         self.mxit.send_message(message)
         
-        self.get_active_tab()._insert_message(0, time.time(), 1, 0, msg)
+        self.get_active_tab()._insert_message(0, time.time(), 0, msg)
         
         return False
         
