@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 #import sys
+import sys
+import os
 import os.path
 import shelve
 import gobject
 
-#Messed up hack for py2exe
-'''if hasattr(sys, 'frozen'):
-    working_dir = os.path.dirname(unicode(sys.executable, sys.getfilesystemencoding()))
-else:
-    working_dir = os.path.dirname(sys.argv[0])'''
+#Chdir to application directory
+#If we are in py2exe enviroment we use a different method for getting application directory
+if hasattr(sys, 'frozen'):
+    os.chdir(os.path.dirname(unicode(sys.executable, sys.getfilesystemencoding())))
+elif not os.path.dirname(sys.argv[0]) == '':
+    os.chdir(os.path.dirname(sys.argv[0]))
 
 #TODO: Implement proper logging
 import sys
@@ -37,8 +40,6 @@ from sound import Sound
 
 gtk.gdk.threads_init()
 
-import traceback
-
 class MXit:
     ''' Main application class, everything is stored and happens through here '''
     def __init__(self):
@@ -53,8 +54,7 @@ class MXit:
         self.protocol = None
 
         self.sound = Sound(self)
-        self.main_window = ApplicationWindow(self)
-        self.MainWindow = self.main_window
+        self.MainWindow = self.main_window = ApplicationWindow(self)
         if not self.settings.has_key('category'):
             self.activation_window = ActivationWindow(self)
         else:
@@ -64,6 +64,7 @@ class MXit:
                     self.do_login()
             except Exception, e:
                 e.printStackTrace()
+                print 'sup'
                 LoginWindow(self)
 
     def tempErr(self, message):
@@ -119,8 +120,7 @@ class MXit:
     def send_message(self, msg):
         self.protocol.send(msg)
 
-    def sendMsg(self, msg):
-        self.protocol.send(msg)
+    sendMsg = send_message
             
     def do_login(self, password=None):
         from protocol.commands import LoginMessage

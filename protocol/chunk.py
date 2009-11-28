@@ -46,9 +46,10 @@ def parseCustomResource(data, length, applicationSession):
     return chunkLength
     
 def parseSplashImage(data, length, applicationSession):
+    print 'hello there'
     anchor = struct.unpack('b', data[0])[0] #Anchor
     timeToShow = struct.unpack('b', data[1])[0] #Time to show
-    bgColour = struct.unpack('>i', data[2:6])[0] #Bgcolout
+    bgColour = struct.unpack('>i', data[2:6])[0] #Bgcolour
     imageData = data[6:length] #Image data
     
     SplashScreen.saveSplash(imageData, timeToShow)
@@ -58,3 +59,4 @@ def parseOfferFile(data, length, applicationSession):
     
 def sendFile(contactAddresses, filename, applicationSession):
     mime, encoding = mimetype.guess_type(filename)
+    log.msg('We don\'t have file support at the moment')

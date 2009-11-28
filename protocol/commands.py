@@ -62,7 +62,7 @@ def handle_login(errorCode, errorMessage, message, mxit):
     #Make sure that on next login we get a login screen and not the registration screen
     mxit.settings['registered'] = '1'
     #Temporary store password to be used for auto login
-    mxit.settings['password'] = mxit.tempPassword
+    mxit.settings['password'] = mxit.settings['tempPassword']
  
     sesid = message[0]
     message = message[1]

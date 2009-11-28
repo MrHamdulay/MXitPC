@@ -109,11 +109,10 @@ class ApplicationWindow:
         PreferencesDialog(self.mxit)
     
     def on_loginItem_activate(self, widget):
-        self.mxit['windows']['LoginWindow'] = LoginWindow(self.mxit)
-        pass
+        self.mxit.windows['LoginWindow'] = LoginWindow(self.mxit)
         
     def on_registerItem_activate(self, widget):
-        self.mxit['windows']['RegistrationWindow'] = RegistrationWindow(self.mxit)
+        self.mxit.windows['RegistrationWindow'] = RegistrationWindow(self.mxit)
         
     def openChatTab(self, contactAddress):
         try:
@@ -138,7 +137,7 @@ class ApplicationWindow:
 
     def on_removeContactItem_activate(self, widget):
         from protocol.commands import RemoveContactMessage
-        model, iterRow = self.mxit['contactStore'].view.get_selection().get_selected()
+        model, iterRow = self.mxit.contactStore.view.get_selection().get_selected()
         if not iterRow:
             errorDialog('Please select a contact first')
             return
@@ -150,7 +149,7 @@ class ApplicationWindow:
         del model[iterRow]
         
     def on_editContactItem_activate(self, widget):
-        model, iterRow = self.mxit['contactStore'].view.get_selection().get_selected()
+        model, iterRow = self.mxit.contactStore.view.get_selection().get_selected()
         if not iterRow:
             errorDialog('Please select a contact first')
             

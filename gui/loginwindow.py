@@ -23,7 +23,7 @@ class LoginWindow:
 
     def on_loginWindow_destroy(self, widget):
         widget.destroy()
-        del self.mxit['windows']['LoginWindow']
+        del self.mxit.windows['LoginWindow']
 
     def on_response(self, dialog, response_id, *args):
         #If we get a response other then login return
