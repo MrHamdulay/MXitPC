@@ -20,7 +20,7 @@ class MultiMXCreateWindow:
         dialog.connect('response', self.on_response)
         
         container = self.builder.get_object('container')
-        for contact in self.mxit['contactStore'].contactContactList.itervalues():
+        for contact in self.mxit.contactStore.contactContactList.itervalues():
             if not contact.presence == OFFLINE and contact.contactType == CONTACT_TYPE_MXIT:
                 contactobject = gtk.CheckButton(label=contact.nickname)
                 contactobject.set_name(contact.contactAddress)
@@ -33,7 +33,7 @@ class MultiMXCreateWindow:
         if not response_id == 0:
             dialog.destroy()
             return
-        contactlist = [self.mxit['contactStore'].contactContactList[button.get_name()] for button in self.contactButtonList if button.get_active()]
+        contactlist = [self.mxit.contactStore.contactContactList[button.get_name()] for button in self.contactButtonList if button.get_active()]
         if len(contactlist) == 0:
             errorDialog('Please select at least one contact')
             return
@@ -43,4 +43,4 @@ class MultiMXCreateWindow:
             return
         dialog.destroy()
         message = CreateMultiMX(groupname, contactlist)
-        self.mxit.sendMsg(message)
+        self.mxit.send_message(message)

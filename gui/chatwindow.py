@@ -56,7 +56,7 @@ class ChatTab(gtk.ScrolledWindow):
         if data[0] == 'send':
             message = Message(self.contact.contactAddress, data[1])
             self.mxit.send_message(message)
-            self._insert_message(0, time.time(), 1, 0, data[1])
+            self._insert_message(0, time.time(), 1, data[1])
         
     def _sanitiseMessage(self, message):
         return message.replace('<', '&lt;').replace('>', '&gt;').replace('&', '&amp;').replace('\n', '<br />\n')

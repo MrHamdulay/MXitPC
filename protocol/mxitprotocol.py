@@ -118,8 +118,10 @@ class MXitProtocolThread(threading.Thread):
             try:
                 message = self.messageQueue.get(True, 1)
             except Queue.Empty:
-                if message == '' or message == None:
+                if message in (None, ''):
                     continue
+                else:
+                    raise
             except AttributeError:
                 pass
             else:

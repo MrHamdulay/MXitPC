@@ -62,9 +62,8 @@ class MXit:
             try:
                 if self.settings['autoLogin']:
                     self.do_login()
-                else:
-                    raise Exception
-            except:
+            except Exception, e:
+                e.printStackTrace()
                 LoginWindow(self)
 
     def tempErr(self, message):

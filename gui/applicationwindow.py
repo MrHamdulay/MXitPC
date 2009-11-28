@@ -1,8 +1,8 @@
 import gtk
 import os.path
 import urlparse
+import shelve
 
-from twisted.persisted import sob
 from twisted.internet import reactor
 from twisted.python import log
 
@@ -34,17 +34,9 @@ class ApplicationWindow:
         #Set default window icon
         gtk.window_set_default_icon_from_file(os.path.join('gui', 'images', 'desktop.ico'))
         
-        self.splashScreen()
+        SplashScreen()
         self.initGui()
-        
-    def splashScreen(self):
-        try:
-            splash = sob.load('splashScreen', 'pickle')
-            SplashScreen(splash, self.mxit)
-        except IOError:
-            #We don't have a splash screen
-            pass
-            
+
     def initGui(self):
         self.builder = gtk.Builder()
         self.builder.add_from_file(os.path.join('gui', 'glade', 'MainWindow.glade'))

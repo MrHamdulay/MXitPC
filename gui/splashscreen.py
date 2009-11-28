@@ -8,16 +8,29 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import os.path
+import shelve
 
 from twisted.internet import reactor
 
 class SplashScreen:
-    def __init__(self, splash, applicationSession):
-        self.applicationSession = applicationSession
-        self.image = splash[3]
-        self.timeToShow = splash[1]
+    def __init__(self):
+        try:
+            splash = shelve.open('splashScreen.dat')
+            self.image = splash['image']
+            self.timeToShow = splash['timeToShow']
         
-        self.initGui()
+            self.initGui()
+        except KeyError:
+            #Don't have a Splash Screen in cache
+            pass
+
+    @classmethod
+    def saveSplash(cls, image, timeToShow):
+        print 'We hath been called my leige'
+        splashData = shelve.open('splashScreen.dat')
+        splashData['image'] = image
+        splashData['timeToShow'] = timeToShow
+        splashData.close()
         
     def initGui(self):
         self.builder = gtk.Builder()

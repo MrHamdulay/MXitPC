@@ -1,7 +1,6 @@
 import struct
 import mimetypes
 
-from twisted.persisted import sob
 from twisted.python import log
 
 from protocol import constants
@@ -47,15 +46,12 @@ def parseCustomResource(data, length, applicationSession):
     return chunkLength
     
 def parseSplashImage(data, length, applicationSession):
-    splash = [
-    struct.unpack('b', data[0])[0], #Anchor
-    struct.unpack('b', data[1])[0], #Time to show
-    struct.unpack('>i', data[2:6])[0], #Bgcolout
-    data[6:length] #Image data
-    ]
+    anchor = struct.unpack('b', data[0])[0] #Anchor
+    timeToShow = struct.unpack('b', data[1])[0] #Time to show
+    bgColour = struct.unpack('>i', data[2:6])[0] #Bgcolout
+    imageData = data[6:length] #Image data
     
-    splashFile = sob.Persistent(splash, 'splash')
-    splashFile.save(filename='splashScreen')
+    SplashScreen.saveSplash(imageData, timeToShow)
     
 def parseOfferFile(data, length, applicationSession):
     log.msg('We don\'t have file support at the moment')
