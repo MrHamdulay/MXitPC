@@ -28,8 +28,8 @@ class ChatTab(gtk.ScrolledWindow):
         self.mxit = mxit
 
         self.textview = HtmlTextView()
-        self.textview.connect('focus-in-event', self.receivedFocus)
-        self.textview.connect('url-clicked', self.urlClickedCallback)
+        self.textview.connect('focus-in-event', self._receivedFocus)
+        self.textview.connect('url-clicked', self._urlClickedCallback)
         self.textview.set_wrap_mode(gtk.WRAP_WORD)
         self.textview.show()
         self.add(self.textview)
@@ -50,16 +50,15 @@ class ChatTab(gtk.ScrolledWindow):
     def isOpen(self):
         return self._open
 
-    def urlClickedCallback(self, textview, url, type):
+    def _urlClickedCallback(self, textview, url, type):
         data = url.split('|')
         print data
         if data[0] == 'send':
             message = Message(self.contact.contactAddress, data[1])
             self.mxit.send_message(message)
-            self.insert_message(0, time.time(), 1, 0, data[1])
+            self._insert_message(0, time.time(), 1, 0, data[1])
         
     def _sanitiseMessage(self, message):
-        #Unneeded for some reason
         return message.replace('<', '&lt;').replace('>', '&gt;').replace('&', '&amp;').replace('\n', '<br />\n')
         
     def _parseMessage(self, message):
@@ -81,11 +80,7 @@ class ChatTab(gtk.ScrolledWindow):
         #self.scroll_to_iter(end_iter, 0.1, True, 0.0, 0.5)
         self.textview.scroll_to_iter(self.textview.get_buffer().get_end_iter(), 0.1)
     
-    def insert_message(self, origin, contactAddress, timestamp, type, msg):
-        ''' Parse message for emoticons and MXit markup 
-        
-        origin: 1 if from server, 0 if from us'''
-
+    def _insert_message(self, origin, timestamp, type, msg):
         msg = markup.parse(msg)
         html = '<p>'
         if origin:
@@ -118,7 +113,7 @@ class ChatTab(gtk.ScrolledWindow):
         
         data is a list containing all information sent from server'''
         
-        self.insert_message(1, timestamp, type, msg)
+        self._insert_message(1, timestamp, type, msg)
         
         if not self.parentWindow.get_active_tab() == self:
             self.parentWindow.notebook.set_tab_label(self, self.parentWindow.create_tab_label(True, self.contact))
@@ -128,14 +123,14 @@ class ChatTab(gtk.ScrolledWindow):
             
         self.mxit.sound.message_received()
             
-    def receivedFocus(self, window, *args):
+    def _receivedFocus(self, window, *args):
         self.mxit.contactStore.updateRow(self.contact.contactAddress, messageAvailable=0)
 
 class MultiMxTab(ChatTab):
     def __init__(self, contact, parent, mxit):
         ChatTab.__init__(self, contact, parent, mxit)
 
-    def insert_message(self, origin, timestamp, type, msg):
+    def _insert_message(self, origin, timestamp, type, msg):
         nickname = self.contact.nickname
         if type == MESSAGE_TYPE_NORMAL:
             start = msg.find('<')
