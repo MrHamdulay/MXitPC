@@ -30,7 +30,7 @@ class ClientMessage:
     
     _sent = False
     
-    def __init__(self, command, message):
+    def __init__(self, command, message=''):
         self.command = command
         self.message = message
     

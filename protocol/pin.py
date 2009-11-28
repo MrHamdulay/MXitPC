@@ -56,4 +56,6 @@ class Pin(object):
     
     def __str__(self):
         return str(self.encryptedPassword)
-    
+
+    def __repr__(self):
+        return '<Pin pin="%s" encrypted="">' % (self.unencryptedPassword, self.encrypyedPassword)

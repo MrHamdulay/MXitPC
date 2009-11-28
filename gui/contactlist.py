@@ -1,5 +1,6 @@
 import os.path
 import gtk
+from gtk.gdk import Pixbuf
 
 from twisted.python import log
 from twisted.internet import reactor
@@ -9,16 +10,19 @@ from contact import Contact
 
 from constants import *
 
+CONTACT_LIST_MODEL_ROWS = (('Nickname', 'Contact Address', 'Group', 'Presence', 'int presence', 'mood', 'type', 'Message available'),
+                           (str,        str,                str,    Pixbuf,     int,            Pixbuf,  int,    Pixbuf))
+
 class ContactList:
+    friendListNames = []
+    groupList = {}
+    contactContactList = {}
     _rowCacheIter = {}
+
     def __init__(self, treeview, mxit, contactList=None):
         self.mxit = mxit
-        
         self.view = treeview
-        self.friendListNames = []
-        self.groupList = {}
-        self.contactContactList = {}
-        
+       
         self.initResources()
         self.initTree()
         
@@ -49,7 +53,7 @@ class ContactList:
             mood
             type
             messageAvailable'''
-        self.friendListModel = gtk.TreeStore(str, str, str, gtk.gdk.Pixbuf, int, gtk.gdk.Pixbuf, int, gtk.gdk.Pixbuf)
+        self.friendListModel = gtk.TreeStore(*CONTACT_LIST_MODEL_ROWS[1])
         #Sort store according to presence
         self.friendListSortable = gtk.TreeModelSort(self.friendListModel)
         self.friendListSortable.set_default_sort_func(self.treeSort)
