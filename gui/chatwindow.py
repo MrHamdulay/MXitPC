@@ -85,8 +85,9 @@ class ChatTab(gtk.ScrolledWindow):
         html = '<p>'
         if origin:
             html = '%s<span style="color: red">%s </span>' % (html, self._sanitiseMessage(self.contact.nickname))
-            if datetime.date.today().day == datetime.datetime.fromtimestamp(timestamp).day:
-                senttime = datetime.datetime.fromtimestamp(timestamp).time().strftime('%H:%M')
+            timeReceived=datetime.datetime.fromtimestamp(timestamp)
+            if datetime.date.today().day == timeReceived.day:
+                senttime = timeReceived.time().strftime('%H:%M')
             else:
                 senttime = datetime.datetime.fromtimestamp(timestamp).strftime('%d/%m/%y %H:%M')
             html = '%s<span style="color: grey">%s </span>' % (html, senttime)
@@ -294,7 +295,7 @@ class ChatWindow:
         message = Message(contactAddress, msg)
         self.mxit.send_message(message)
         
-        self.get_active_tab().insertMessage(0, time.time(), 1, 0, msg)
+        self.get_active_tab()._insert_message(0, time.time(), 1, 0, msg)
         
         return False
         
