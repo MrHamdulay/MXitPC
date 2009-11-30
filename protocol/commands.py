@@ -121,11 +121,11 @@ def handle_receive_messages(errorCode, errorMessage, data, mxit):
     def received_message(contactAddress, timestamp, type, msg, id, flags):
         chatTab = mxit.MainWindow.openChatTab(contactAddress)
         chatTab.receiveMessage(contactAddress, timestamp, type, msg, id, flags)
-        
+
     contactAddress = data[0][0]
     timestamp = int(data[0][1])
     type = int(data[0][2])
-    
+
     print 'Received message of type',type
 
     try:

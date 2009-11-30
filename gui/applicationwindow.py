@@ -24,7 +24,6 @@ from constants import *
 #Todo: move a lot of stuff out of here
 
 class ApplicationWindow:
-    connected = False
     status = ''
     presence = 1
 
@@ -119,7 +118,7 @@ class ApplicationWindow:
             self.mxit.activeChatWindow.create_chat_tab(self.mxit.contactStore.getContact(contactAddress))
         except AttributeError:
             self.mxit.activeChatWindow = ChatWindow(self.mxit)
-              
+ 
         self.mxit.activeChatWindow.create_chat_tab(self.mxit.contactStore.getContact(contactAddress))
         return self.mxit.activeChatWindow.tabList[contactAddress]
         
