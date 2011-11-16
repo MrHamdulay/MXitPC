@@ -66,7 +66,7 @@ class MXit:
                 LoginWindow(self)
 
     def tempErr(self, message):
-        print 'Error occured: ', message 
+        print 'Error occured: ', message
 
     def init_connection(self):
         #Give default values if we don't have any settings
@@ -92,7 +92,7 @@ class MXit:
         except:
             print 'For some reason we couldn\'t parse command: ', data
             return
-            
+
         try:
             error_code = int(data[1])
             error_message = None
@@ -101,25 +101,25 @@ class MXit:
             error_message = data[1][1]
             print error_code, error_message
             gobject.timeout_add(0, errorDialog, errorMessage)
-              
+
         #When dealing with chunks we shouldn't parse the message. Otherwise we get messed up
         #binary data
         if command == 27:
             message = original_data.split('\0', 2)[2]
         else:
             message = data[2:]
-          
+
         try:
             func = getattr(commands, "handle_%s" % COMMANDS[command])
             func(error_code, error_message, message, self)
         except AttributeError:
             commands.handle_default(command, error_code, message, error_message, self)
-    
+
     def send_message(self, msg):
         self.protocol.send(msg)
 
     sendMsg = send_message
-            
+
     def do_login(self, password=None):
         from protocol.commands import LoginMessage
 
@@ -133,19 +133,19 @@ class MXit:
                 del self.settings['tempPassword']
                 LoginWindow(self)
                 return
-        
+
         #TODO: Allow user to select locale and language. No really... do this
         #I'm being for real now
         locale = 'en'
         loginMessage = LoginMessage(password, locale, self)
         self.send_message(loginMessage)
-    
+
     def do_logout(self):
         from protocol.commands import LogoutMessage
         self.sendMsg(LogoutMessage(self))
         self.settings.close()
         #gobject.timeout_add(40*1000, gtk.main_quit)
-    
+
     def do_keepalive(self):
         from protocol.commands import KeepAliveMessage
         self.sendMsg(KeepAliveMessage())

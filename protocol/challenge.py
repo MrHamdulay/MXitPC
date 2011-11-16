@@ -14,8 +14,10 @@ class MXitServerException(Exception):
     pass
 
 class Challenge:
-    '''Class that does the challenge required by MXit server'''
-    
+    '''Class that does the challenge required by MXit server
+    first challenge then receive pid
+    '''
+
     def __init__(self, errback):
         self.pid = None
         self.challengeData = None
@@ -27,13 +29,13 @@ class Challenge:
             baseUrl = RESOURCE_LOCATION
         else:
             baseUrl = self.challengeData['url']
-    
+
         requestUrl = "%s?%s" % (baseUrl, '&'.join(
                     map(lambda x: "%s=%s"%(x[0], x[1]), data.iteritems())))
-        
-        defer = getPage(requestUrl).addCallback(lambda x: x.split(';'))
+
+        defer = getPage(requestUrl).addCallback(lambda x: x.split(';')).addErrback(self.errback)
         return defer
-        
+
     def requestChallenge(self, callback, requestCaptcha=True, requestLocales=True, requestCountries=True):
         '''Challenge the MXit server to reply with the product ID'''
         deferred = self._requestData({'type': 'challenge',
@@ -52,16 +54,17 @@ class Challenge:
         parsed = []
         for item in data.split(','):
             parsed.append(item.split('|'))
-        return parsed 
-            
+        return parsed
+
     def _requestChallenge(self, challengeData):
         '''Request challenge's callback '''
+        print 'got challenge data'
         if challengeData[0] != '0':
             raise MXitServerException
-        
+
         if challengeData[1] != '':
             RESOURCE_LOCATION = challengeData[1]
-        
+
         self.challengeData = {'url': challengeData[1],
                               'sessionid': challengeData[2],
                               'captcha': challengeData[3].decode('base64'),
@@ -81,23 +84,29 @@ class Challenge:
 
     def challengeReply(self, callback, challengeResponse, number, login=0, location='ZA', locale='en'):
         ''' Send reply to the challenge. server will reply with Product ID '''
-        
+
         ''' We are currently using all the default locale and location values
             Todo: Request this information from user'''
-        if login: self.category = '1'
-        else: self.category = '0'
+        print 'got challenge reply'
+        if login:
+            self.category = '1'
+        else:
+            self.category = '0'
         self.loginname = number
-        deferred = self._requestData({'type': 'getpid',
-                                                 'sessionid': self.challengeData['sessionid'],
-                                                 'ver': '5.8.2',
-                                                 'login': number,
-                                                 'cat': 'Y',
-                                                 'chalresp': challengeResponse,
-                                                 'cc': location, 
-                                                 'loc': locale,
-                                                 'path': self.category,
-                                                 'ts': time.time()
-                                  })
+        data = {'type': 'getpid',
+                'sessionid': self.challengeData['sessionid'],
+                'ver': '5.8.2',
+                'login': number,
+                'cat': 'Y',
+                'chalresp': challengeResponse,
+                'cc': location,
+                'loc': locale,
+                'path': self.category,
+                #'ts': time.time()
+                }
+        print 'challenge reply'
+        print data
+        deferred = self._requestData(data)
         deferred.addCallback(self._challengeReply)
         deferred.addCallback(callback)
         deferred.addErrback(self.errback)
@@ -106,6 +115,8 @@ class Challenge:
         '''Challenge reply callback '''
 
         ''' Check error code '''
+        print 'challenge reply callback'
+        print data
         if int(data[0]) == 1:
             print 'invalid captcha'
             self.challengeData['captcha'] = data[1].decode('base64')
@@ -119,7 +130,7 @@ class Challenge:
                 self.challengeData['sessionid'] = data[1]
             except:
                 self.challengeData['captcha'] = data[1].decode('base64')
-            
+
             raise MXitServerException('Session ID expired: Took too long to enter CAPTCHA, please try again')
         elif int(data[0]) == 3:
             print 'undefined error'
