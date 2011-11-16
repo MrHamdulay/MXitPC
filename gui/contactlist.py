@@ -24,7 +24,7 @@ class ContactModelIter(gtk.TreeIter):
 class ContactModel(gtk.GenericTreeModel):
     #Contact list grouped according to groups
     _contactList = {'default': []}
-    _groupList = ['blanky']
+    _groupList = []
     _columnTypes = (str, str, str, Pixbuf, int, int, Pixbuf)
     _columnNames = ('Nickname', 'Contact Address', 'Group', 'Presence', 'mood', 'type', 'Message available'),
     _contactContactList = {}
@@ -99,15 +99,17 @@ class ContactModel(gtk.GenericTreeModel):
         return (self._groupList.index(contact.group), self._contactList[contact.group].index(contact))
 
     def on_iter_next(self, contact):
-        print 'on_iter_next',contact
+        print 'on_iter_next',str(contact)
         if contact is None or contact.path is None:
             return None
-        if len(contact.path) == 1 and len(self._groupList) > contact.path[0]:
-            return ContactModelIter((contact.path[0]+1))
-        elif len(contact.path) == 2 and len(self._contactList[self._groupList[contact.path[0]]])  > contact.path[1]:
+        if len(contact.path) == 1 and contact.path[0]+1 < len(self._groupList):
+            return ContactModelIter((contact.path[0]+1,))
+        elif len(contact.path) == 2 and contact.path[1]+1 < len(self._contactList[self._groupList[contact.path[0]]]):
             return ContactModelIter((contact.path[0], contact.path[1]+1))
+        print 'no next'
 
     def on_get_iter(self, path):
+        print 'on_get_iter %s' % str(path)
         if not isinstance(path, tuple):
             path = path,
         return ContactModelIter(path)
@@ -119,13 +121,14 @@ class ContactModel(gtk.GenericTreeModel):
         return False
 
     def on_iter_children(self, parent):
+        print 'on_iter_children %s' % str(parent)
         if parent is None:
             return self.on_get_iter((0,))
-        print 'on_iter_children %s' % parent
         if len(parent.path) == 1:
             return ContactModelIter((parent.path[0], 0))
 
     def on_iter_n_children(self, iter):
+        print 'on_iter_n_children %s' % str(iter)
         if iter is None:
             return len(self._groupList)
         else:
@@ -134,9 +137,11 @@ class ContactModel(gtk.GenericTreeModel):
             return len(self._contactList[self._groupList[iter.path[0]]])
 
     def on_iter_nth_child(self, rowref, n):
-        print 'oN_iter_nth_child', rowref
+        print 'oN_iter_nth_child %s %s' % (str(rowref), str(n))
         if rowref is None:
-            return ContactModelIter((n,))
+            if n < len(self._groupList):
+                return ContactModelIter((n,))
+            return None
         if len(rowref.path) >= 2:
             return None
         if len(rowref.path) == 1 and len(self._groupList[rowref.path[1]]) > n:
@@ -144,15 +149,15 @@ class ContactModel(gtk.GenericTreeModel):
 
     def on_iter_parent(self, child):
         print 'on_iter_parent', child
-        if isinstance(child, Contact):
-            return child.group
-        else:
-            return None
+        if len(child.path) == 2:
+            return ContactModelIter((child.path[0],))
 
     def on_get_value(self, iter, column):
-        print 'on_get_value %s' % iter
+        print 'on_get_value %s' % str(iter)
         if len(iter.path) == 1:
-            return self._groupList[iter.path[0]] if column == 0 else ''
+            if column == 0 and iter.path[0] < len(self._groupList):
+                return self._groupList[iter.path[0]]
+            return ''
 
         groupNo, contactNo = iter.path
         contact = self._contactList[self._groupList[groupNo]][contactNo]
@@ -164,9 +169,9 @@ class ContactModel(gtk.GenericTreeModel):
         elif column == 2:
             return contact.group
         elif column == 3:
-            return contact.presence
+            return self.presencePixbufs[contact.presence]
         elif column == 4:
-            return contact.mood
+            return self.moodPixbufs[contact.mood]
         elif column == 5:
             return contact.contactType
         elif column == 6:
@@ -177,8 +182,8 @@ class ContactList:
         self.mxit = mxit
         self.view = treeview
 
-        self._initResources()
         self._initTree()
+        self._initResources()
 
     def _initTree(self):
         self.treeModel = ContactModel()
@@ -198,9 +203,9 @@ class ContactList:
         pixbufCellRenderer = gtk.CellRendererPixbuf()
         pixbufCellRenderer.set_property('xalign', 0.0)
 
-        '''presenceColumn = gtk.TreeViewColumn('Presence', pixbufCellRenderer, pixbuf=3)
+        presenceColumn = gtk.TreeViewColumn('Presence', pixbufCellRenderer, pixbuf=3)
         self.view.append_column(presenceColumn)
-        presenceColumn.pack_start(pixbufCellRenderer)'''
+        presenceColumn.pack_start(pixbufCellRenderer)
 
         nicknameColumn = gtk.TreeViewColumn('Nickname', textCellRenderer, text=0)
         nicknameColumn.set_max_width(170)
@@ -209,11 +214,11 @@ class ContactList:
 
         self.view.set_search_column(0)
 
-        '''moodColumn = gtk.TreeViewColumn('Mood', pixbufCellRenderer, pixbuf=5)
+        moodColumn = gtk.TreeViewColumn('Mood', pixbufCellRenderer, pixbuf=5)
         self.view.append_column(moodColumn)
         moodColumn.pack_start(pixbufCellRenderer)
 
-        messageAvailableColumn = gtk.TreeViewColumn('MessageAvailable', pixbufCellRenderer, pixbuf = 7)
+        '''messageAvailableColumn = gtk.TreeViewColumn('MessageAvailable', pixbufCellRenderer, pixbuf = 7)
         self.view.append_column(messageAvailableColumn)
         messageAvailableColumn.pack_start(pixbufCellRenderer)'''
 
@@ -232,6 +237,9 @@ class ContactList:
         base = os.path.join('gui', 'images')
         self.messagesAvailable = [gtk.gdk.pixbuf_new_from_file(os.path.join(base, 'Mail.png')),
                                   gtk.gdk.pixbuf_new_from_file(os.path.join(base, 'Unread_Mail.png')),]
+
+        self.treeModel.presencePixbufs = self.presencePixbufs
+        self.treeModel.moodPixbufs = self.moodPixbufs
 
     def _treeSort(self, treemodel, iter1, iter2, user_data=None):
         sort = 0
