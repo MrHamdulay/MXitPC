@@ -121,7 +121,7 @@ class ActivationWindow:
         self.animationCancelEvent.set()
         self.assistant.set_page_complete(self.assistant.get_nth_page(2), True)
         if challengeData['category'] == '1': #if login or register
-           self.assistant.set_current_page(5)
+           self.assistant.set_current_page(SUCCESS_PAGE)
 
     def register(self, nickname, password, dob, gender, location, language):
         print 'register thing called'

@@ -10,10 +10,21 @@ from contact import Contact
 
 from constants import *
 
+class ContactModelIter(gtk.TreeIter):
+    def __init__(self, path):
+        if not isinstance(path, tuple):
+            path = path,
+        self.path = path
+
+    def __repr__(self):
+        return '<ContactModelIter path=%s>' % str(self.path)
+
+    __str__  = __repr__
+
 class ContactModel(gtk.GenericTreeModel):
     #Contact list grouped according to groups
     _contactList = {'default': []}
-    _groupList = []
+    _groupList = ['blanky']
     _columnTypes = (str, str, str, Pixbuf, int, int, Pixbuf)
     _columnNames = ('Nickname', 'Contact Address', 'Group', 'Presence', 'mood', 'type', 'Message available'),
     _contactContactList = {}
@@ -22,31 +33,39 @@ class ContactModel(gtk.GenericTreeModel):
         presence = int(presence)
         mood = int(presence)
 
-        if self._groupList.count(group) == 0:
+        if not group in self._groupList:
             self._groupList.append(group)
             #self._groupList.sort()
             self._contactList[group] = []
-            try:
-                path= (self._groupList.index(group),)
-                self.row_inserted(path, self.get_iter(path))
-            except ValueError:
-                pass
+            path= (self._groupList.index(group),)
+            self.row_inserted(path, self.get_iter(path))
 
         contact = Contact(contactAddress, nickname, group, presence, mood, contactType, False)
+        print 'Contact:',contact
         self._contactList[group].append(contact)
         self._contactContactList[contactAddress] = contact
 
         path = (self._groupList.index(group), self._contactList[group].index(contact))
+        print self.get_iter(path)
         self.row_inserted(path, self.get_iter(path))
 
     def getContact(self, contactAddress):
         return self._contactContactList[contactAddress] if contactAddress in self._contactContactList else None
 
+    def getContactNickname(self, nickname):
+        if nickname in self._groupList:
+            return self._contactList[nickname]
+        for contact in self._contactContactList:
+            if contact.nickname == nickname:
+                return contact
+
     #def add(self, contactAddress, nickname, presence, mood, contactType, group=None):
     def update(self, contactAddress, nickname, group, presence, mood, contactType):
         ''' NB: Contact address has to stay the same '''
-        if isinstance(contact, list):
-            return
+        #if isinstance(Contact, list): #cannot remember what this is meant to be
+        #    return
+        print contactAddress, nickname, group, presence, mood, contactType
+        contact = self.getContact(contactAddress)
 
         for i, c in enumerate(self._contactList[contact.group]):
             if c.contactAddress == contact.contactAddress:
@@ -58,6 +77,7 @@ class ContactModel(gtk.GenericTreeModel):
         for c in self._contactList.itervalues():
             if c.contactAddress == contact.contactAddress:
                 #TODO: Finish
+                #can't remember what this is supposed to be so doing it is kind of impossible
                 pass
 
     def remove(self, contact):
@@ -75,52 +95,67 @@ class ContactModel(gtk.GenericTreeModel):
         return len(self._columnTypes)
 
     def on_get_path(self, contact):
-        return self._groupList.index(contact.group), self._contactList[contact.group].index(contact)
+        print 'on_get_path %s' % contact
+        return (self._groupList.index(contact.group), self._contactList[contact.group].index(contact))
 
     def on_iter_next(self, contact):
-        if isinstance(contact, list):
-            try:
-                return _groupList[_groupList.index(contact)+1]
-            except IndexError:
-                return None
-        try:
-            return _contactList[contact.group][_contactList[contact.group].index(contact)+1]
-        except IndexError:
-            try:
-                return _contactList[_groupList[_groupList.index(contact.group)+1]][0]
-            except IndexError:
-                return None
+        print 'on_iter_next',contact
+        if contact is None or contact.path is None:
+            return None
+        if len(contact.path) == 1 and len(self._groupList) > contact.path[0]:
+            return ContactModelIter((contact.path[0]+1))
+        elif len(contact.path) == 2 and len(self._contactList[self._groupList[contact.path[0]]])  > contact.path[1]:
+            return ContactModelIter((contact.path[0], contact.path[1]+1))
 
     def on_get_iter(self, path):
-        try:
-            return self._contactList[self._groupList[path[0]]][path[1]]
-        except IndexError:
-            try:
-                return self._groupList[path[0]]
-            except IndexError:
-                return None
+        if not isinstance(path, tuple):
+            path = path,
+        return ContactModelIter(path)
 
     def on_iter_has_child(self, rowref):
-        return isinstance(rowref, list)
+        print 'on_iter_has_child %s' % rowref
+        if len(rowref.path) == 1:
+            return len(self._contactList[self._groupList[rowref.path[0]]]) > 0
+        return False
 
-    def on_iter_n_children(self, contact):
-        return len(_contactList[contact.group])
+    def on_iter_children(self, parent):
+        if parent is None:
+            return self.on_get_iter((0,))
+        print 'on_iter_children %s' % parent
+        if len(parent.path) == 1:
+            return ContactModelIter((parent.path[0], 0))
+
+    def on_iter_n_children(self, iter):
+        if iter is None:
+            return len(self._groupList)
+        else:
+            if len(iter.path) > 1:
+                return 0
+            return len(self._contactList[self._groupList[iter.path[0]]])
 
     def on_iter_nth_child(self, rowref, n):
-        try:
-            return _contactList[rowref].index(n)
-        except IndexError:
+        print 'oN_iter_nth_child', rowref
+        if rowref is None:
+            return ContactModelIter((n,))
+        if len(rowref.path) >= 2:
             return None
+        if len(rowref.path) == 1 and len(self._groupList[rowref.path[1]]) > n:
+            return ContactModelIter((rowref.path[0], n))
 
     def on_iter_parent(self, child):
+        print 'on_iter_parent', child
         if isinstance(child, Contact):
             return child.group
         else:
             return None
 
-    def on_get_value(self, contact, column):
-        if isinstance(contact, list):
-            return None
+    def on_get_value(self, iter, column):
+        print 'on_get_value %s' % iter
+        if len(iter.path) == 1:
+            return self._groupList[iter.path[0]] if column == 0 else ''
+
+        groupNo, contactNo = iter.path
+        contact = self._contactList[self._groupList[groupNo]][contactNo]
 
         if column == 0:
             return contact.nickname
@@ -153,9 +188,9 @@ class ContactList:
         self.friendListSortable.set_sort_column_id(-1, gtk.SORT_ASCENDING)
 
         self.hideOffline = self.friendListSortable.filter_new()
-        self.hideOffline.set_visible_func(self.hideOfflineFilterFunc)
+        #self.hideOffline.set_visible_func(self.hideOfflineFilterFunc)
 
-        self.view.set_model(self.hideOffline)
+        self.view.set_model(self.treeModel)
         self.view.set_grid_lines(gtk.TREE_VIEW_GRID_LINES_NONE)
         self.view.set_headers_visible(False)
 
@@ -242,18 +277,24 @@ class ContactList:
 
     def parseContactList(self, contactList):
         ''' Takes contact list from server and adds it to TreeStore '''
-        for group, contactAddress, nickname, presence, contactType, mood in contactList:
-            if group == '':
-                group = None
+        try:
+            for person in  contactList:
+                print person
+                group, contactAddress, nickname, presence, contactType, mood = person
+                if group == '':
+                    group = None
 
-            presence = int(presence)
-            mood = int(mood)
-            contactType = int(contactType)
+                presence = int(presence)
+                mood = int(mood)
+                contactType = int(contactType)
 
-            if self.treeModel.getContact(contactAddress) is None:
-                self.treeModel.add(contactAddress, nickname, presence, mood, contactType, group)
-            else:
-                self._contactContactList[contactAddress].on_contactUpdate(nickname, group, presence, mood, self.mxit)
-                self.updateRow(contactAddress, nickname, group, presence, mood, contactType)
+                if self.treeModel.getContact(contactAddress) is None:
+                    self.treeModel.add(contactAddress, nickname, presence, mood, contactType, group)
+                else:
+                    self.treeModel._contactContactList[contactAddress].on_contactUpdate(nickname, group, presence, mood, self.mxit)
+                    self.treeModel.update(contactAddress, nickname, group, presence, mood, contactType)
+        except TypeError, e:
+            print 'TypeError %s' % e
+            print contactList
 
         self.hideOffline.refilter()
