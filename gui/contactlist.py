@@ -60,7 +60,7 @@ class ContactModel(gtk.GenericTreeModel):
                 return contact
 
     #def add(self, contactAddress, nickname, presence, mood, contactType, group=None):
-    def update(self, contactAddress, nickname, group, presence, mood, contactType):
+    def update(self, contactAddress, nickname, group, presence, mood, contactType, messageAvailable=0):
         ''' NB: Contact address has to stay the same '''
         #if isinstance(Contact, list): #cannot remember what this is meant to be
         #    return
@@ -184,6 +184,12 @@ class ContactList:
 
         self._initTree()
         self._initResources()
+
+    def getContact(self, *args):
+        return self.treeModel.getContact(*args)
+
+    def updateRow(self, *args, **kwargs):
+        return self.treeModel.update(*args, **kwargs)
 
     def _initTree(self):
         self.treeModel = ContactModel()

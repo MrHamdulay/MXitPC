@@ -14,7 +14,7 @@ from gui.htmltextview import HtmlTextView
 from gui.smileywindow import SmileyWindow
 from gui.vibeswindow import VibesBox
 from protocol.commands import Message
-from protocol.constants import * 
+from protocol.constants import *
 
 from constants import SMILEYS, PRESENCE_IMAGES_BASE_DIR, PRESENCE_IMAGES_FILENAMES
 import markup
@@ -34,19 +34,19 @@ class ChatTab(gtk.ScrolledWindow):
         self.textview.show()
         self.add(self.textview)
         self.show()
-        
+
         self._open = False
-        
+
     def close_tab(self):
         self._open = False
-        
+
     def open_tab(self):
         self._open = True
-        
+
     def reopenTab(self, parentwindow):
         self.parentWindow = parentwindow
         self._open = True
-        
+
     def isOpen(self):
         return self._open
 
@@ -57,10 +57,10 @@ class ChatTab(gtk.ScrolledWindow):
             message = Message(self.contact.contactAddress, data[1])
             self.mxit.send_message(message)
             self._insert_message(0, time.time(), 1, data[1])
-        
+
     def _sanitiseMessage(self, message):
         return message.replace('<', '&lt;').replace('>', '&gt;').replace('&', '&amp;').replace('\n', '<br />\n')
-        
+
     def _parseMessageEmoticons(self, message):
         #Convert MXit markup to HTML for use in textview
         #message = self._sanitiseMessage(message)
@@ -79,7 +79,7 @@ class ChatTab(gtk.ScrolledWindow):
             pass
         #self.scroll_to_iter(end_iter, 0.1, True, 0.0, 0.5)
         self.textview.scroll_to_iter(self.textview.get_buffer().get_end_iter(), 0.1)
-    
+
     def _insert_message(self, origin, timestamp, type, msg):
         msg = markup.parse(msg)
         html = '<p>'
@@ -93,7 +93,7 @@ class ChatTab(gtk.ScrolledWindow):
             html = '%s<span style="color: grey">%s </span>' % (html, senttime)
         else:
             html = '%s<span style="color: blue">You: </span>' % html
-            
+
         html += self._parseMessageEmoticons(msg)
         html = '%s</p>' % (html)
 
@@ -107,22 +107,22 @@ class ChatTab(gtk.ScrolledWindow):
         elif changed == 'mood':
             self._insertHtml('<span style="color: grey">%s is now %s</span>' % (self.contact.nickname, MOODS[modification]))
 
-        
+
     def receiveMessage(self, contactAddress, timestamp, type, msg, id=0, flags=0):
-        ''' Callback function for when we receive a message 
-        
+        ''' Callback function for when we receive a message
+
         data is a list containing all information sent from server'''
-        
+
         self._insert_message(1, timestamp, type, msg)
-        
+
         if not self.parentWindow.get_active_tab() == self:
             self.parentWindow.notebook.set_tab_label(self, self.parentWindow.create_tab_label(True, self.contact))
             self.mxit.contactStore.updateRow(contactAddress, messageAvailable=1)
         else:
             self.mxit.contactStore.updateRow(contactAddress, messageAvailable=0)
-            
+
         self.mxit.sound.message_received()
-            
+
     def _receivedFocus(self, window, *args):
         self.mxit.contactStore.updateRow(self.contact.contactAddress, messageAvailable=0)
 
@@ -158,21 +158,21 @@ class ChatWindow:
         self.smileyList = []
         self.tabList = {}
         self.vibesBox = None
-        
+
         self.initGui()
         self.window.show_all()
 
         self.initCallbacks()
-        
+
     def initGui(self):
         self.builder = gtk.Builder()
         self.builder.add_from_file(os.path.join('gui', 'glade', 'ChatWindow.glade'))
         self.window = self.builder.get_object('ChatWindow')
         self.builder.connect_signals(self)
-        
+
         self.notebook = self.builder.get_object('ChatBoxNotebook')
         self.notebook.connect('switch-page', self.on_notebook_pageChanged)
-        
+
         #Removed because it introduces too many bugs
         #gtk.notebook_set_window_creation_hook(self.windowCreate)
 
@@ -184,7 +184,7 @@ class ChatWindow:
 
     def on_contact_modified(self, modification, contact, changed):
         try:
-            tab = self.tabList[contact.contactAddress] 
+            tab = self.tabList[contact.contactAddress]
             tab.contact_modified(modification, changed)
         except KeyError:
             #When a key error is thrown its most likely becauseuser hasn't opened a tab for them yet
@@ -195,7 +195,7 @@ class ChatWindow:
 
     def get_active_tab(self):
         return self.notebook.get_nth_page(self.notebook.get_current_page())
-            
+
     def create_tab_label(self, gotMessage, contact):
         box = gtk.HBox()
         if not gotMessage:
@@ -211,15 +211,15 @@ class ChatWindow:
         closebutton.set_image(closeimage)
         closebutton.set_relief(gtk.RELIEF_NONE)
         closebutton.connect('clicked', self.close_tab, contact)
-        
+
         box.add(presenceimage)
         box.add(label)
         box.add(closebutton)
         box.show_all()
         return box
-        
+
     def create_chat_tab(self, contact):
-        label = self.create_tab_label(False, contact) 
+        label = self.create_tab_label(False, contact)
 
         if self.tabList.has_key(contact.contactAddress):
             tab = self.tabList[contact.contactAddress]
@@ -229,23 +229,23 @@ class ChatWindow:
             else:
                 self.tabList[contact.contactAddress] = tab = ChatTab(contact, self, self.mxit)
             contact.set_chat_tab(tab)
-            
+
         if tab.isOpen():
             return
-            
+
         self.notebook.append_page(tab)
         self.notebook.set_tab_reorderable(tab, True)
-        self.notebook.set_tab_label(tab, label) 
-        
+        self.notebook.set_tab_label(tab, label)
+
         tab.open_tab()
         #Make sure this window is showing
         self.window.show_all()
-        
+
     def close_tab(self, button, contact):
         tab = self.tabList[contact.contactAddress]
         tab.close_tab()
         self.notebook.remove_page(self.notebook.page_num(tab))
-        
+
         numPages = self.notebook.get_n_pages()
         if numPages == 0:
             self.window.hide()
@@ -256,54 +256,55 @@ class ChatWindow:
         if '\n' in string:
             buffer = textview.get_buffer()
             buffer.delete(buffer.get_iter_at_offset(-1), buffer.get_end_iter())
-            
+
     def on_smileyButton_clicked(self, *args):
         if self.smileyWindow == None:
             self.smileyWindow = SmileyWindow(self.addSmiley)
         self.smileyWindow.show()
-        
+
     def on_vibesButton_clicked(self, *args):
         if self.vibesBox == None:
             self.vibesBox = VibesBox(self.appendToEntry)
         self.vibesBox.show()
-    
+
     def addSmiley(self, pixbuf, smiley_code):
         buf = self.builder.get_object('entryView').get_buffer()
         iter = buf.get_end_iter()
         buf.insert_pixbuf(iter, pixbuf)
         self.smileyList.append((iter, smiley_code))
-            
+
     def appendToEntry(self, addition):
         buf = self.builder.get_object('entryView').get_buffer()
         buf.insert(buf.get_end_iter(), addition)
-        
+
     def on_keypress(self, widget, event, *args):
         #We are only looking for enter button presses
         #Todo: Replace 65293 with actual constant
         if not event.keyval == 65293:
             return
-            
+
         buf = self.builder.get_object('entryView').get_buffer()
         for iter, smiley_code in self.smileyList:
             buf.insert(iter, smiley_code)
         msg = buf.get_text(buf.get_start_iter(),buf.get_end_iter())
         buf.set_text('')
-        
+
         #Get contactAddress of active tab
+        print self.get_active_tab().contact
         contactAddress = self.get_active_tab().contact.contactAddress
-        
+
         message = Message(contactAddress, msg)
         self.mxit.send_message(message)
-        
+
         self.get_active_tab()._insert_message(0, time.time(), 0, msg)
-        
+
         return False
-        
+
     def on_notebook_pageChanged(self, notebook, page, page_num, userdata=None):
         tab = notebook.get_nth_page(page_num)
         self.window.set_title(tab.contact.nickname)
         notebook.set_tab_label(tab, self.create_tab_label(False, tab.contact))
-    
+
     def on_closeWindow_activate(self, *args):
         #Had to create this function to ensure window's widgets never get destroyed
         self.window.hide()

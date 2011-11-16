@@ -1,7 +1,7 @@
 class Contact:
     presence = None
     mood = None
-    
+
     contactAddress = None
     nickname = None
     group = None
@@ -20,20 +20,20 @@ class Contact:
         self.mood = int(mood)
         self.contactType = int(contactType)
         self.messageAvailable = messageAvailable
-        
+
     def __str__(self):
         return "<contact %s %s>" % (self.nickname, self.contactAddress)
-        
+
     def __repr__(self):
         return self.__str__()
-        
+
     def isGroup(self):
         #Todo: return real value
         return False
-    
+
     def set_chat_tab(self, tab):
         self.tab = tab
-        
+
     def deleteContact(self):
         pass
 
@@ -41,12 +41,12 @@ class Contact:
         if self.tab == None:
             #Todo: create tab
             pass
-        self.tab.receiveMessage(self.contactAddress, timestamp, type, message) 
+        self.tab.receiveMessage(self.contactAddress, timestamp, type, message)
 
     def on_contactUpdate(self, nickname, group, presence, mood, mxit):
         ''' Contact was updated (i.e presence, mood or nickname changed)
             activate required callbacks etc. '''
-            
+
         try:
             #Check for changes
             if not nickname == self.nickname:
@@ -55,7 +55,7 @@ class Contact:
                     callback(nickname, self, 'nickname')
         except:
             pass
-                
+
         try:
             if not group == self.group:
                 self.group = group
@@ -63,7 +63,7 @@ class Contact:
                     callback(group, self, 'group')
         except:
             pass
-                
+
         try:
             if not presence == self.presence:
                 self.presence = presence
@@ -71,7 +71,7 @@ class Contact:
                     callback(presence, self, 'presence')
         except:
             pass
-    
+
         try:
             if not mood == self.mood:
                 self.mood = mood

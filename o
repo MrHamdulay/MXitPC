@@ -1,0 +1,690 @@
+/home/yaseen/Code/MXitPC/gui/contactlist.py:214: GtkWarning: gtk_tree_view_column_cell_layout_pack_start: assertion `! gtk_tree_view_column_get_cell_info (column, cell)' failed
+  presenceColumn.pack_start(pixbufCellRenderer)
+/home/yaseen/Code/MXitPC/gui/contactlist.py:219: GtkWarning: gtk_tree_view_column_cell_layout_pack_start: assertion `! gtk_tree_view_column_get_cell_info (column, cell)' failed
+  nicknameColumn.pack_start(textCellRenderer)
+/home/yaseen/Code/MXitPC/gui/contactlist.py:225: GtkWarning: gtk_tree_view_column_cell_layout_pack_start: assertion `! gtk_tree_view_column_get_cell_info (column, cell)' failed
+  moodColumn.pack_start(pixbufCellRenderer)
+/home/yaseen/Code/MXitPC/twisted/internet/gtk2reactor.py:185: Warning: g_object_set_property: assertion `G_IS_VALUE (value)' failed
+  self.__run()
+/home/yaseen/Code/MXitPC/twisted/internet/gtk2reactor.py:185: Warning: g_value_unset: assertion `G_IS_VALUE (value)' failed
+  self.__run()
+
+** (main.py:5137): CRITICAL **: pygtk_generic_tree_model_ref_node: assertion `VALID_ITER(iter, tree_model)' failed
+on_get_iter (0,)
+on_iter_next <ContactModelIter path=(0,)>
+no next
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_iter (0,)
+oN_iter_nth_child None 0
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+['', 'info@m', 'Info', '1', '13', '0']
+on_get_iter (0,)
+on_get_iter (0,)
+on_iter_n_children None
+on_get_iter (0,)
+on_get_iter (0,)
+on_iter_n_children None
+Contact: <contact Info info@m>
+on_get_iter (0, 0)
+<GtkTreeIter at 0x316e340>
+on_get_iter (0, 0)
+on_get_iter (0,)
+on_iter_has_child <ContactModelIter path=(0,)>
+['', 'joebanker@m', 'Wallet', '1', '8', '0']
+Contact: <contact Wallet joebanker@m>
+on_get_iter (0, 1)
+<GtkTreeIter at 0x3277400>
+on_get_iter (0, 1)
+['', 'tradepost@m', 'Tradepost', '1', '8', '0']
+Contact: <contact Tradepost tradepost@m>
+on_get_iter (0, 2)
+<GtkTreeIter at 0x326ad40>
+on_get_iter (0, 2)
+['', 'gallery@m', 'Gallery', '1', '12', '0']
+Contact: <contact Gallery gallery@m>
+on_get_iter (0, 3)
+<GtkTreeIter at 0x3279a00>
+on_get_iter (0, 3)
+['Games', 'tixi@m', 'tixi', '1', '8', '0']
+on_get_iter (1,)
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+Contact: <contact tixi tixi@m>
+on_get_iter (1, 0)
+<GtkTreeIter at 0x32774a0>
+on_get_iter (1, 0)
+on_get_iter (1,)
+on_iter_has_child <ContactModelIter path=(1,)>
+['General apps', 'mxitmail@m', 'E-mail', '1', '8', '0']
+on_get_iter (2,)
+on_get_iter (1,)
+on_get_value <ContactModelIter path=(1,)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+Contact: <contact E-mail mxitmail@m>
+on_get_iter (2, 0)
+<GtkTreeIter at 0x3277040>
+on_get_iter (2, 0)
+on_get_iter (2,)
+on_iter_has_child <ContactModelIter path=(2,)>
+['Services', 'mxchange@m', 'mxchange', '1', '8', '0']
+on_get_iter (3,)
+on_get_iter (1,)
+on_get_value <ContactModelIter path=(1,)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (2,)
+on_get_value <ContactModelIter path=(2,)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+Contact: <contact mxchange mxchange@m>
+on_get_iter (3, 0)
+<GtkTreeIter at 0x3276ee0>
+on_get_iter (3, 0)
+on_get_iter (3,)
+on_iter_has_child <ContactModelIter path=(3,)>
+['General apps', 'accuweather.com@m', 'accuweather.com', '1', '8', '0']
+Contact: <contact accuweather.com accuweather.com@m>
+on_get_iter (2, 1)
+<GtkTreeIter at 0x326d480>
+on_get_iter (2, 1)
+on_get_iter (0,)
+on_iter_children <ContactModelIter path=(0,)>
+on_get_iter (0,)
+on_iter_n_children <ContactModelIter path=(0,)>
+on_get_iter (0, 0)
+on_get_iter (0,)
+on_get_iter (0, 0)
+on_get_iter (0, 1)
+on_get_value <ContactModelIter path=(0, 0)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (0, 2)
+on_get_iter (0, 3)
+on_get_value <ContactModelIter path=(0, 2)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (0, 0)
+on_get_iter (0, 2)
+on_get_value <ContactModelIter path=(0, 0)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (0, 1)
+on_get_iter (0, 2)
+on_get_value <ContactModelIter path=(0, 1)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (0, 0)
+on_get_iter (0,)
+on_iter_has_child <ContactModelIter path=(0,)>
+on_get_iter (0, 0)
+on_iter_children <ContactModelIter path=(0, 0)>
+on_get_iter (0, 1)
+on_iter_children <ContactModelIter path=(0, 1)>
+on_get_iter (0, 2)
+on_iter_children <ContactModelIter path=(0, 2)>
+on_get_iter (0, 3)
+on_iter_children <ContactModelIter path=(0, 3)>
+on_get_iter (1,)
+on_iter_children <ContactModelIter path=(1,)>
+on_get_iter (1,)
+on_iter_n_children <ContactModelIter path=(1,)>
+on_get_iter (1, 0)
+on_get_iter (1,)
+on_get_iter (1, 0)
+on_get_iter (1,)
+on_iter_has_child <ContactModelIter path=(1,)>
+on_get_iter (1, 0)
+on_iter_children <ContactModelIter path=(1, 0)>
+on_get_iter (2,)
+on_iter_children <ContactModelIter path=(2,)>
+on_get_iter (2,)
+on_iter_n_children <ContactModelIter path=(2,)>
+on_get_iter (2, 0)
+on_get_iter (2,)
+on_get_iter (2, 0)
+on_get_iter (2, 1)
+on_get_value <ContactModelIter path=(2, 0)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (2, 0)
+on_get_iter (2,)
+on_iter_has_child <ContactModelIter path=(2,)>
+on_get_iter (2, 0)
+on_iter_children <ContactModelIter path=(2, 0)>
+on_get_iter (2, 1)
+on_iter_children <ContactModelIter path=(2, 1)>
+on_get_iter (3,)
+on_iter_children <ContactModelIter path=(3,)>
+on_get_iter (3,)
+on_iter_n_children <ContactModelIter path=(3,)>
+on_get_iter (3, 0)
+on_get_iter (3,)
+on_get_iter (3, 0)
+on_get_iter (3,)
+on_iter_has_child <ContactModelIter path=(3,)>
+on_get_iter (3, 0)
+on_iter_children <ContactModelIter path=(3, 0)>
+['', 'info@m', 'Info', '1', '13', '0']
+info@m Info None 1 0 13
+on_get_iter (0, 0)
+on_get_iter (0, 0)
+on_get_iter (0,)
+on_get_iter (0, 0)
+on_get_iter (0, 2)
+on_get_value <ContactModelIter path=(0, 2)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (0, 3)
+on_get_value <ContactModelIter path=(0, 3)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (0, 0)
+['', 'joebanker@m', 'Wallet', '1', '8', '0']
+joebanker@m Wallet None 1 0 8
+on_get_iter (0, 1)
+on_get_iter (0, 1)
+on_get_iter (0,)
+on_get_iter (0, 1)
+on_get_iter (0, 3)
+on_get_value <ContactModelIter path=(0, 3)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (0, 0)
+on_get_value <ContactModelIter path=(0, 0)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (0, 1)
+['', 'tradepost@m', 'Tradepost', '1', '8', '0']
+tradepost@m Tradepost None 1 0 8
+on_get_iter (0, 2)
+on_get_iter (0, 2)
+on_get_iter (0,)
+on_get_iter (0, 2)
+on_get_iter (0, 0)
+on_get_value <ContactModelIter path=(0, 0)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (0, 1)
+on_get_value <ContactModelIter path=(0, 1)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (0, 2)
+['', 'gallery@m', 'Gallery', '1', '12', '0']
+gallery@m Gallery None 1 0 12
+on_get_iter (0, 3)
+on_get_iter (0, 3)
+on_get_iter (0,)
+on_get_iter (0, 3)
+on_get_iter (0, 1)
+on_get_value <ContactModelIter path=(0, 1)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (0, 2)
+on_get_value <ContactModelIter path=(0, 2)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+on_get_iter (0, 3)
+['Games', 'tixi@m', 'tixi', '1', '8', '0']
+tixi@m tixi Games 1 0 8
+on_get_iter (1, 0)
+['General apps', 'accuweather.com@m', 'accuweather.com', '1', '8', '0']
+accuweather.com@m accuweather.com General apps 1 0 8
+on_get_iter (2, 1)
+on_get_iter (0,)
+on_iter_has_child <ContactModelIter path=(0,)>
+on_get_iter (0, 0)
+on_iter_children <ContactModelIter path=(0, 0)>
+on_get_iter (0, 1)
+on_iter_children <ContactModelIter path=(0, 1)>
+on_get_iter (0, 2)
+on_iter_children <ContactModelIter path=(0, 2)>
+on_get_iter (0, 3)
+on_iter_children <ContactModelIter path=(0, 3)>
+on_get_iter (1,)
+on_iter_children <ContactModelIter path=(1,)>
+on_get_iter (1,)
+on_iter_n_children <ContactModelIter path=(1,)>
+on_get_iter (1, 0)
+on_get_iter (1,)
+on_get_iter (1, 0)
+on_get_iter (1,)
+on_iter_has_child <ContactModelIter path=(1,)>
+on_get_iter (1, 0)
+on_iter_children <ContactModelIter path=(1, 0)>
+on_get_iter (2,)
+on_iter_children <ContactModelIter path=(2,)>
+on_get_iter (2,)
+on_iter_n_children <ContactModelIter path=(2,)>
+on_get_iter (2, 0)
+on_get_iter (2,)
+on_get_iter (2, 0)
+on_get_iter (2, 1)
+on_get_value <ContactModelIter path=(2, 0)>
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 253, in _treeSort
+    presence1 = treemodel.get_value(iter1, 4)
+TypeError: unknown type (null)
+/home/yaseen/Code/MXitPC/twisted/internet/gtk2reactor.py:185: GtkWarning: /build/buildd/gtk+2.0-2.24.6/gtk/gtktreeview.c:6086 (validate_visible_area): assertion `has_next' failed.
+There is a disparity between the internal view of the GtkTreeView,
+and the GtkTreeModel.  This generally means that the model has changed
+without letting the view know.  Any display from now on is likely to
+be incorrect.
+
+  self.__run()
+/home/yaseen/Code/MXitPC/twisted/internet/gtk2reactor.py:185: GtkWarning: /build/buildd/gtk+2.0-2.24.6/gtk/gtktreeview.c:5027 (gtk_tree_view_bin_expose): assertion `has_next' failed.
+There is a disparity between the internal view of the GtkTreeView,
+and the GtkTreeModel.  This generally means that the model has changed
+without letting the view know.  Any display from now on is likely to
+be incorrect.
+
+  self.__run()
+on_get_iter (2, 0)
+on_get_iter (2,)
+on_iter_has_child <ContactModelIter path=(2,)>
+on_get_iter (2, 0)
+on_iter_children <ContactModelIter path=(2, 0)>
+on_get_iter (2, 1)
+on_iter_children <ContactModelIter path=(2, 1)>
+on_get_iter (3,)
+on_iter_children <ContactModelIter path=(3,)>
+on_get_iter (3,)
+on_iter_n_children <ContactModelIter path=(3,)>
+on_get_iter (3, 0)
+on_get_iter (3,)
+on_get_iter (3, 0)
+on_get_iter (3,)
+on_iter_has_child <ContactModelIter path=(3,)>
+on_get_iter (3, 0)
+on_iter_children <ContactModelIter path=(3, 0)>
+on_get_iter (1,)
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_iter_next <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(2,)>
+on_iter_next <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(3,)>
+on_get_value <ContactModelIter path=(3,)>
+on_get_value <ContactModelIter path=(3,)>
+on_iter_next <ContactModelIter path=(3,)>
+no next
+on_get_iter (4,)
+on_get_value <ContactModelIter path=(4,)>
+on_get_value <ContactModelIter path=(4,)>
+on_get_value <ContactModelIter path=(4,)>
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_iter_next <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_iter_next <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(2,)>
+on_iter_next <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(3,)>
+on_get_value <ContactModelIter path=(3,)>
+on_get_value <ContactModelIter path=(3,)>
+on_get_value <ContactModelIter path=(3,)>
+on_get_value <ContactModelIter path=(3,)>
+on_get_value <ContactModelIter path=(3,)>
+on_iter_next <ContactModelIter path=(3,)>
+no next
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_iter_next <ContactModelIter path=(0,)>
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_iter_next <ContactModelIter path=(0,)>
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_iter_next <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_iter_next <ContactModelIter path=(1,)>
+on_get_iter (1,)
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_iter_next <ContactModelIter path=(1,)>
+on_get_iter/home/yaseen/Code/MXitPC/twisted/internet/gtk2reactor.py:185: Warning: unable to set property `pixbuf' of type `GdkPixbuf' from value of type `gint'
+  self.__run()
+ (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_iter_next <ContactModelIter path=(0,)>
+on_get_iter (0,)
+on_iter_has_child <ContactModelIter path=(0,)>
+on_iter_has_child <ContactModelIter path=(0,)>
+on_iter_children <ContactModelIter path=(0,)>
+on_iter_has_child <ContactModelIter path=(0, 0)>
+on_iter_next <ContactModelIter path=(0, 0)>
+on_iter_has_child <ContactModelIter path=(0, 1)>
+on_iter_next <ContactModelIter path=(0, 1)>
+on_iter_has_child <ContactModelIter path=(0, 2)>
+on_iter_next <ContactModelIter path=(0, 2)>
+on_iter_has_child <ContactModelIter path=(0, 3)>
+on_iter_next <ContactModelIter path=(0, 3)>
+no next
+on_get_iter (0,)
+on_iter_children <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_iter_next <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_iter_next <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_iter_next <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_iter_parent <ContactModelIter path=(0, 3)>
+on_iter_next <ContactModelIter path=(0,)>
+on_iter_next <ContactModelIter path=(1,)>
+on_iter_next <ContactModelIter path=(2,)>
+on_iter_next <ContactModelIter path=(3,)>
+no next
+on_get_iter (0, 0)
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_iter_next <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_iter_next <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_iter_next <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_iter_parent <ContactModelIter path=(0, 3)>
+on_iter_next <ContactModelIter path=(0,)>
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_iter_children <ContactModelIter path=(0,)>
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_iter_children <ContactModelIter path=(0,)>
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_iter_children <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_iter_next <ContactModelIter path=(0, 0)>
+on_get_iter (0, 0)
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_iter (0, 0)
+oN_iter_nth_child None 0
+oN_iter_nth_child <ContactModelIter path=(0,)> 0
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 147, in on_iter_nth_child
+    if len(rowref.path) == 1 and len(self._groupList[rowref.path[1]]) > n:
+IndexError: tuple index out of range
+
+** (main.py:5137): CRITICAL **: pygtk_generic_tree_model_ref_node: assertion `VALID_ITER(iter, tree_model)' failed
+on_get_iter (0, 0)
+on_get_iter (0, 0)
+oN_iter_nth_child None 0
+oN_iter_nth_child <ContactModelIter path=(0,)> 0
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 147, in on_iter_nth_child
+    if len(rowref.path) == 1 and len(self._groupList[rowref.path[1]]) > n:
+IndexError: tuple index out of range
+
+** (main.py:5137): CRITICAL **: pygtk_generic_tree_model_ref_node: assertion `VALID_ITER(iter, tree_model)' failed
+on_get_iter (0, 0)
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_iter_next <ContactModelIter path=(0, 0)>
+on_get_iter (0, 0)
+on_get_value <ContactModelIter path=(0, 0)>
+oN_iter_nth_child None 0
+oN_iter_nth_child <ContactModelIter path=(0,)> 0
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 147, in on_iter_nth_child
+    if len(rowref.path) == 1 and len(self._groupList[rowref.path[1]]) > n:
+IndexError: tuple index out of range
+
+** (main.py:5137): CRITICAL **: pygtk_generic_tree_model_unref_node: assertion `VALID_ITER(iter, tree_model)' failed
+on_get_iter (0, 0)
+oN_iter_nth_child None 0
+oN_iter_nth_child <ContactModelIter path=(0,)> 0
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 147, in on_iter_nth_child
+    if len(rowref.path) == 1 and len(self._groupList[rowref.path[1]]) > n:
+IndexError: tuple index out of range
+
+** (main.py:5137): CRITICAL **: pygtk_generic_tree_model_ref_node: assertion `VALID_ITER(iter, tree_model)' failed
+on_get_iter (0, 0)
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_iter (0,)
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0,)>
+on_iter_children <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 0)>
+on_iter_next <ContactModelIter path=(0, 0)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 1)>
+on_iter_next <ContactModelIter path=(0, 1)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 2)>
+on_iter_next <ContactModelIter path=(0, 2)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_get_value <ContactModelIter path=(0, 3)>
+on_iter_parent <ContactModelIter path=(0, 3)>
+on_iter_next <ContactModelIter path=(0,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(1,)>
+on_iter_next <ContactModelIter path=(1,)>
+on_get_value <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(2,)>
+on_iter_next <ContactModelIter path=(2,)>
+on_get_value <ContactModelIter path=(3,)>
+on_get_value <ContactModelIter path=(3,)>
+on_get_value <ContactModelIter path=(3,)>
+on_get_value <ContactModelIter path=(3,)>
+on_get_value <ContactModelIter path=(3,)>
+on_get_value <ContactModelIter path=(3,)>
+on_iter_next <ContactModelIter path=(3,)>
+no next
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/chatwindow.py", line 127, in _receivedFocus
+    self.mxit.contactStore.updateRow(self.contact.contactAddress, messageAvailable=0)
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 192, in updateRow
+    return self.treeModel.update(*args, **kwargs)
+TypeError: update() takes at least 7 arguments (3 given)
+<contact Info info@m>
+Received message of type 7
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/protocol/commands.py", line 123, in received_message
+    chatTab.receiveMessage(contactAddress, timestamp, type, msg, id, flags)
+  File "/home/yaseen/Code/MXitPC/gui/chatwindow.py", line 122, in receiveMessage
+    self.mxit.contactStore.updateRow(contactAddress, messageAvailable=0)
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 192, in updateRow
+    return self.treeModel.update(*args, **kwargs)
+TypeError: update() takes at least 7 arguments (3 given)
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/gui/chatwindow.py", line 127, in _receivedFocus
+    self.mxit.contactStore.updateRow(self.contact.contactAddress, messageAvailable=0)
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 192, in updateRow
+    return self.treeModel.update(*args, **kwargs)
+TypeError: update() takes at least 7 arguments (3 given)
+['send', '1']
+Received message of type 7
+Traceback (most recent call last):
+  File "/home/yaseen/Code/MXitPC/protocol/commands.py", line 123, in received_message
+    chatTab.receiveMessage(contactAddress, timestamp, type, msg, id, flags)
+  File "/home/yaseen/Code/MXitPC/gui/chatwindow.py", line 122, in receiveMessage
+    self.mxit.contactStore.updateRow(contactAddress, messageAvailable=0)
+  File "/home/yaseen/Code/MXitPC/gui/contactlist.py", line 192, in updateRow
+    return self.treeModel.update(*args, **kwargs)
+TypeError: update() takes at least 7 arguments (3 given)
