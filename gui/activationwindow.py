@@ -48,8 +48,7 @@ class ActivationWindow:
         #self.assistant.set_deletable(True)
 
         self.assistant.set_page_complete(self.assistant.get_nth_page(WELCOME_PAGE), False)
-        for i in range(5):
-            self.assistant.set_page_complete(self.assistant.get_nth_page(i), True)
+        self.assistant.set_page_complete(self.assistant.get_nth_page(ACTIVATION_PAGE), True)
 
         self.builder.connect_signals(self)
 
@@ -94,6 +93,7 @@ class ActivationWindow:
 
     def on_challenge_error(self, error, *args):
         r = error.trap(challenge.CaptchaException, challenge.MXitServerException)
+        print 'Error',error
         errorDialog(error.getErrorMessage())
         if r == challenge.CaptchaException:
             self.load_captcha(self.challenge.challengeData['captcha'])
@@ -107,6 +107,7 @@ class ActivationWindow:
 
     def on_received_activation_info(self, challengeData):
         print 'on received activation info'
+        self.assistant.set_page_complete(self.assistant.get_nth_page(WELCOME_PAGE), True)
         self.challengeData = challengeData
         self.animationCancelEvent.set()
         self.load_captcha(challengeData['captcha'])

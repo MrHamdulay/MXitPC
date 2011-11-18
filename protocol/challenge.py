@@ -33,8 +33,10 @@ class Challenge:
         requestUrl = "%s?%s" % (baseUrl, '&'.join(
                     map(lambda x: "%s=%s"%(x[0], x[1]), data.iteritems())))
 
-        defer = getPage(requestUrl).addCallback(lambda x: x.split(';')).addErrback(self.errback)
-        return defer
+        deferred = getPage(requestUrl)
+        deferred.addErrback(self.errback)
+        deferred.addCallback(lambda x: x.split(';'))
+        return deferred
 
     def requestChallenge(self, callback, requestCaptcha=True, requestLocales=True, requestCountries=True):
         '''Challenge the MXit server to reply with the product ID'''
