@@ -133,7 +133,7 @@ class ContactModel(gtk.GenericTreeModel):
             return None
         if len(rowref.path) >= 2:
             return None
-        if len(rowref.path) == 1 and len(self._groupList[rowref.path[1]]) > n:
+        if len(rowref.path) == 1 and len(self._contactList[self._groupList[rowref.path[0]]]) > n:
             return ContactModelIter((rowref.path[0], n))
 
     def on_iter_parent(self, child):
