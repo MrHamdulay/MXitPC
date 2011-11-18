@@ -113,6 +113,11 @@ class ActivationWindow:
 
         for locale, language_name in self.challengeData['languages']:
             self.builder.get_object('languageStore').append((locale, language_name))
+        for i in xrange(len(self.challengeData['countries'])):
+            if self.challengeData['countries'][i][0] == 'ZA':
+                row = self.challengeData['countries'].pop(i)
+                self.challengeData['countries'].insert(0,row)
+                break
         for country_code, country_name in self.challengeData['countries']:
             self.builder.get_object('locationStore').append((country_code, country_name))
         self.assistant.set_page_complete(self.assistant.get_nth_page(ACTIVATION_PAGE), True)

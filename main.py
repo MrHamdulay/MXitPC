@@ -65,9 +65,6 @@ class MXit:
             except Exception, e:
                 LoginWindow(self)
 
-    def tempErr(self, message):
-        print 'Error occured: ', message
-
     def init_connection(self):
         #Give default values if we don't have any settings
         hostname = self.settings['soc1'].split('//')[1].split(':')[0]
@@ -75,7 +72,7 @@ class MXit:
 
         self.protocol = MXitProtocol(hostname, port, self.settings['loginname'])
         self.protocol.addReceivedMessageHook(self.handleMsg)
-        self.protocol.addErrorOccuredHook(self.tempErr)
+        self.protocol.addErrorOccuredHook(errorDialog)
         self.protocol.start()
 
 
@@ -168,3 +165,4 @@ try:
     reactor.run()
 finally:
     mxit.settings.close()
+    mxit.do_logout()

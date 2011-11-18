@@ -7,18 +7,18 @@ from gui.errordialog import errorDialog
 class LoginWindow:
     def __init__(self, mxit):
         self.mxit = mxit
-        
+
         self.builder = gtk.Builder()
         self.builder.add_from_file(os.path.join('gui', 'glade', 'LoginWindow.glade'))
-        
+
         numberEntry = self.builder.get_object('numberEntry')
         numberEntry.set_text(self.mxit.settings['loginname'])
         numberEntry.set_editable(False)
-        
+
         dialog = self.builder.get_object('LoginDialog')
         dialog.connect('response', self.on_response)
         dialog.show()
-        
+
         self.builder.connect_signals(self)
 
     def on_loginWindow_destroy(self, widget):
@@ -32,7 +32,7 @@ class LoginWindow:
 
         passwordEntry = self.builder.get_object('passwordEntry')
         password = passwordEntry.get_text()
-        
+
         self.mxit.settings['tempPassword'] = password
         #Validation
         try:
@@ -43,9 +43,9 @@ class LoginWindow:
         except ValueError:
             errorDialog('Password must be a number and more than 4 characters')
             return
-            
+
         self.mxit.settings['autoLogin'] = self.builder.get_object('rememberButton').get_active()
-        
+
         self.mxit.do_login(password)
-            
+
         dialog.destroy()

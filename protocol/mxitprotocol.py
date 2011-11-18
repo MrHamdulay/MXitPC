@@ -15,32 +15,32 @@ def parseServerMsg(msg):
             temp.append(i.split('\1'))
         else:
             temp.append(i)
-    
+
     return temp
 
 def socketBuildClientMessage(loginname, msgArgs):
     #Todo: separate this into TCP adapter
     cm, ms = msgArgs
-    
+
     if not isinstance(ms, str) and not ms == None:
         ms = '\1'.join([str(item) for item in ms])
 
     message = 'id=%s\0cm=%d' % (loginname, int(cm))
     if not ms == None:
         message += '\0ms=%s' % ms
-    
+
     message = 'ln=%d\0%s' % (len(message), message)
-    return message 
+    return message
 
 class MXitProtocol:
     _started = False
     _thread = None
-    
+
     _messageQueue = Queue.Queue()
 
     receivedMessageHooks = []
     errorOccuredHooks = []
-    
+
     def __init__(self, hostname, port, loginname):
         self._hostname = hostname
         self._port = port
@@ -153,7 +153,7 @@ class MXitProtocolThread(threading.Thread):
             self._buffer += data
         else:
             self._buffer = data
-            
+
         #Parse data
         self._parseData()
         return True
@@ -172,18 +172,18 @@ class MXitProtocolThread(threading.Thread):
         except ValueError:
             self._length = -1
             self._length_end = -1
-            
+
         #Check if we have full message from length header, if we don't wait until we do
         if not (len(self._buffer[self._length_end+1:]) >= self._length):
             return
-        
+
         #Get all data in this message
         data = self._buffer[self._length_end+1:self._length+self._length_end+1]
         #Check if we got proper data, if not just clear the buffer. this shouldn't be happening very often
         if len(data) == 0:
             self._buffer = ''
             return
-        
+
         #Remove the last character if it's a nonsense character
         if data[-1] in '\0\1':
             data = data[:-1]
@@ -193,14 +193,14 @@ class MXitProtocolThread(threading.Thread):
         #Set temp variables to default
         self._length = -1
         self._length_end = -1
-        
+
         #Call message received hooks
         [gobject.idle_add(function, data) for function in self.receivedMessageHooks]
 
         #If their is more data in the buffer, attempt to parse it
         if len(self._buffer):
             self._parseData()
-        
+
     def _handleMessage(self, message):
         data = parseServerMsg(message)
         command = int(data[0])
