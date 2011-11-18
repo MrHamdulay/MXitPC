@@ -23,7 +23,6 @@ class ActivationWindow:
 
     def __init__(self, mxit):
         self.mxit = mxit
-        print self.mxit
         self.request_activation()
 
         self.builder = gtk.Builder()
@@ -94,13 +93,17 @@ class ActivationWindow:
         self.challenge.requestChallenge(self.on_received_activation_info)
 
     def on_challenge_error(self, error, *args):
-        print 'Oh noes, an error', error
         r = error.trap(challenge.CaptchaException, challenge.MXitServerException)
-        if r == challenge.CaptchaException or r == challenge.MXitServerException:
-            errorDialog(error.getErrorMessage())
+        errorDialog(error.getErrorMessage())
+        if r == challenge.CaptchaException:
             self.load_captcha(self.challenge.challengeData['captcha'])
             self.animationCancelEvent.set()
             self.assistant.set_current_page(ACTIVATION_PAGE)
+        elif r == challenge.MXitServerException:
+            self.mxit.activation_window = ActivationWindow(self.mxit)
+            self.assistant.hide()
+            self.assistant.destroy()
+            del self
 
     def on_received_activation_info(self, challengeData):
         print 'on received activation info'

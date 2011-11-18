@@ -41,12 +41,10 @@ class ContactModel(gtk.GenericTreeModel):
             self.row_inserted(path, self.get_iter(path))
 
         contact = Contact(contactAddress, nickname, group, presence, mood, contactType, False)
-        print 'Contact:',contact
         self._contactList[group].append(contact)
         self._contactContactList[contactAddress] = contact
 
         path = (self._groupList.index(group), self._contactList[group].index(contact))
-        print self.get_iter(path)
         self.row_inserted(path, self.get_iter(path))
 
     def getContact(self, contactAddress):
@@ -64,7 +62,6 @@ class ContactModel(gtk.GenericTreeModel):
         ''' NB: Contact address has to stay the same '''
         #if isinstance(Contact, list): #cannot remember what this is meant to be
         #    return
-        print contactAddress, nickname, group, presence, mood, contactType
         contact = self.getContact(contactAddress)
 
         for i, c in enumerate(self._contactList[contact.group]):
@@ -95,40 +92,33 @@ class ContactModel(gtk.GenericTreeModel):
         return len(self._columnTypes)
 
     def on_get_path(self, contact):
-        print 'on_get_path %s' % contact
         return (self._groupList.index(contact.group), self._contactList[contact.group].index(contact))
 
     def on_iter_next(self, contact):
-        print 'on_iter_next',str(contact)
         if contact is None or contact.path is None:
             return None
         if len(contact.path) == 1 and contact.path[0]+1 < len(self._groupList):
             return ContactModelIter((contact.path[0]+1,))
         elif len(contact.path) == 2 and contact.path[1]+1 < len(self._contactList[self._groupList[contact.path[0]]]):
             return ContactModelIter((contact.path[0], contact.path[1]+1))
-        print 'no next'
 
     def on_get_iter(self, path):
-        print 'on_get_iter %s' % str(path)
         if not isinstance(path, tuple):
             path = path,
         return ContactModelIter(path)
 
     def on_iter_has_child(self, rowref):
-        print 'on_iter_has_child %s' % rowref
         if len(rowref.path) == 1:
             return len(self._contactList[self._groupList[rowref.path[0]]]) > 0
         return False
 
     def on_iter_children(self, parent):
-        print 'on_iter_children %s' % str(parent)
         if parent is None:
             return self.on_get_iter((0,))
         if len(parent.path) == 1:
             return ContactModelIter((parent.path[0], 0))
 
     def on_iter_n_children(self, iter):
-        print 'on_iter_n_children %s' % str(iter)
         if iter is None:
             return len(self._groupList)
         else:
@@ -137,7 +127,6 @@ class ContactModel(gtk.GenericTreeModel):
             return len(self._contactList[self._groupList[iter.path[0]]])
 
     def on_iter_nth_child(self, rowref, n):
-        print 'oN_iter_nth_child %s %s' % (str(rowref), str(n))
         if rowref is None:
             if n < len(self._groupList):
                 return ContactModelIter((n,))
@@ -148,12 +137,10 @@ class ContactModel(gtk.GenericTreeModel):
             return ContactModelIter((rowref.path[0], n))
 
     def on_iter_parent(self, child):
-        print 'on_iter_parent', child
         if len(child.path) == 2:
             return ContactModelIter((child.path[0],))
 
     def on_get_value(self, iter, column):
-        print 'on_get_value %s' % str(iter)
         if len(iter.path) == 1:
             if column == 0 and iter.path[0] < len(self._groupList):
                 return self._groupList[iter.path[0]]
@@ -293,7 +280,6 @@ class ContactList:
         ''' Takes contact list from server and adds it to TreeStore '''
         try:
             for person in  contactList:
-                print person
                 group, contactAddress, nickname, presence, contactType, mood = person
                 if group == '':
                     group = None
@@ -309,6 +295,5 @@ class ContactList:
                     self.treeModel.update(contactAddress, nickname, group, presence, mood, contactType)
         except TypeError, e:
             print 'TypeError %s' % e
-            print contactList
 
         self.hideOffline.refilter()

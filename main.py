@@ -100,7 +100,7 @@ class MXit:
             error_code = int(data[1][0])
             error_message = data[1][1]
             print error_code, error_message
-            gobject.timeout_add(0, errorDialog, errorMessage)
+            gobject.timeout_add(0, errorDialog, error_message)
 
         #When dealing with chunks we shouldn't parse the message. Otherwise we get messed up
         #binary data
@@ -163,5 +163,8 @@ except:
 #Setup gtk theme
 gtk.rc_parse(os.path.join('gtk-2.0', 'gtkrc'))
 #Start application
-MXit()
-reactor.run()
+mxit = MXit()
+try:
+    reactor.run()
+finally:
+    mxit.settings.close()
